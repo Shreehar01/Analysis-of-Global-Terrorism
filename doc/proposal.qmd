@@ -25,7 +25,7 @@ variables that you plan to use in your analysis, for example:
 * weight: The patient's weight (kg)
 * sex: The patient's sex, male or female
 * age: The patient's age (months)
-
+* new_variable: A new variable
 ]
 
 # Data Acquisition and Processing

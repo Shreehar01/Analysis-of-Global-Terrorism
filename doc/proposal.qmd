@@ -1,8 +1,8 @@
 ---
-title: "Proposal: [Your project name]"
+title: "Proposal: Analysis of Global Terrorist Attacks"
 subtitle: "DATA 450 Capstone"
-author: "[Your Name]"
-date: today
+author: "Shreehar Joshi"
+date: 02/05/2023
 bibliography: references.bib
 number-sections: true
 format:
@@ -12,21 +12,50 @@ jupyter: python3
 
 # Introduction
 
-[This section should contain background and introduction to your general topic.]
+Global terrorism has been a major concern for countries across the world for many decades. Terrorist attacks are defined as acts of violence committed by individuals or groups with the intention of causing harm and destruction to a large number of people. These attacks can take many forms, including bombings, mass shootings, hijackings, and hostage situations, and can occur in any location, from urban centers to remote rural areas.
 
-# Dataset
+Terrorist attacks have a profound impact on both the victims and the larger society. They cause physical harm and loss of life, as well as emotional trauma and psychological distress. They can also have long-lasting socio-economic consequences, disrupting trade and commerce, causing job losses, and decreasing investor confidence.
 
-[In this section, desribe the dataset(s). This includes things like where you
-obtained the dataset. Include a full citation, as specified 
-[here](https://guides.lib.umich.edu/c.php?g=282964&p=3285995). Describe how the
-data was obtained by the data owner/curator, as best as you can. List the 
-variables that you plan to use in your analysis, for example:
+In recent years, some of the most devastating terrorist attacks have occurred in cities across the globe, such as Paris, Madrid, London, and New York. These attacks have resulted in the loss of thousands of lives and have had a profound impact on the global community. In response to these attacks, many countries have increased their efforts to prevent and counteract terrorism, including by strengthening their security measures, enhancing their intelligence gathering and analysis capabilities, and working together with international partners to share information and coordinate efforts.
 
-* weight: The patient's weight (kg)
-* sex: The patient's sex, male or female
-* age: The patient's age (months)
-* new_variable: A new variable
-]
+Despite these efforts, the threat of terrorism continues to persist, with new groups emerging and existing ones adapting their tactics. As the world becomes more interconnected, the risk of terrorism spreading across borders increases, making it all the more important for countries to work together to address this global challenge.
+
+# Datasets
+
+In this project, three different datasets will be used to analyse the trends of terrorist activities and their impact on social and economic health of different countries that are plagued the most by such activities.
+
+The first dataset - [Global Terrorism Database (GTD)](https://www.kaggle.com/datasets/START-UMD/gtd) - is an open-source database including information on more than 180,000 terrorist attacks around the world from 1970 through 2017. The database is maintained by researchers at the National Consortium for the Study of Terrorism and Responses to Terrorism ([START](https://www.start.umd.edu/gtd/)), headquartered at the University of Maryland. Prepared by reviewing more than 4,000,000 news articles and 25,000 news sources, it is the most comprehensive unclassified database on terrorist attacks in the world. The variables that will be use in the analysis from this dataset are as follows:
+
+* iyear: The year in which the incident occured
+* imonth: The month in which the incident occured
+* iday: The day in which the incident occured
+* country: The country code in which the incident occured
+* country_txt: The country name in which the incident occured
+* region_txt: The geographic region in which the incident occured
+* city: The city in which the incident occured
+* latitude: The latitude of the city in which the incident occured
+* longitude: The longitude of the city in which the incident occured
+* suicide: A flag indicating if the incident was a suicide attack
+* attack_type1_txt: The general method of attack and broad class of tactic used
+* targtype1_txt: The general type of the target/victim
+* gname: The name of the group that carried out the attack
+* weaptype1_txt: The general type of the weapon used in the incident
+* nkill: The total number of confirmed fatalties for the incident
+
+Similarly, the second dataset - [World Population](https://www.kaggle.com/datasets/nguyenthicamlai/population-2022) - is an open-source dataset in kaggle consisting of different information of the world population from 1955 to 2020. It was created by Nguen Thi Cam Lai using the [Countries in the world by population](https://www.worldometers.info/world-population/population-by-country/) dataset from the Worldometer. The variables that will be used from this dataset are as follows:
+
+* Year: The year for which the population data is recorded
+* Population: The total population of a country
+* Migrants(net): The net number of migrants in a country
+* FertlityRate: The fertility rate of a specific country
+
+The third dataset - [World, Region, Country GDP/GDP per capita](https://www.kaggle.com/datasets/tmishinev/world-country-gdp-19602021) - is an open-source dataset in kaggle consisting of the Gross Domestic Product of different dfferent countries of the world from 1960 to 2021. It was created by Todor Mishinev using the [World Bank national accounts data](https://data.worldbank.org/indicator/NY.GDP.MKTP.CD). The variables that will be used from this dataset are as follows:
+
+* Country Name: The name of the country
+* Country Code: The three letter codes for the countries
+* year: The year for which the GDP data is recorded
+* GDP_per_capita: GDP per capita for a specific country in the given year 
+
 
 # Data Acquisition and Processing
 
@@ -118,37 +147,6 @@ results.]
 
 **Final Exam Week (5/8):** *Final Presentations during final exam slot,
 Monday May 9th 3:20-6:40pm.* [Do not schedule any other tasks for this week.]
-
-## Some cool Quarto stuff
-
-[You can delete this section from your proposal.]
-
-For your reference, here's an example of a Python code cell in Quarto,
-along with a figure that gets generated, along with a caption and a label
-so that it can be referred to automatically as "Figure 1" (or whatever)
-in the writeup.
-
-For a demonstration of a line plot on a polar axis, see @fig-polar.
-
-```{python}
-#| label: fig-polar
-#| fig-cap: "A line plot on a polar axis"
-
-import numpy as np
-import matplotlib.pyplot as plt
-
-r = np.arange(0, 2, 0.01)
-theta = 2 * np.pi * r
-fig, ax = plt.subplots(
-  subplot_kw = {'projection': 'polar'} 
-)
-ax.plot(theta, r)
-ax.set_rticks([0.5, 1, 1.5, 2])
-ax.grid(True)
-plt.show()
-```
-
-Here's an example of citing a source [see @phil99, pp. 33-35]. Be sure the source information is entered in "BibTeX" form in the `references.bib` file.
 
 # References
 

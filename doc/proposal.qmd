@@ -256,7 +256,7 @@ will have three bars representing different evaluation metrics for a model. Ther
 * Question 13 (6 hours)
 * Presentation prep and practice (4 hours)
 
-**Week 8 (3/6 - 3/12):** *Presentations in class on Thurs 3/9.*
+**Week 8 (3/6 - 3/12):**
 
 * Question 13 (5.5 hours)
 * Presentation peer review (1.5 hours)

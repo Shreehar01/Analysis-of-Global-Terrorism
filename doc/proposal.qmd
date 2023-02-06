@@ -298,7 +298,7 @@ will have three bars representing different evaluation metrics for a model. Ther
 
 # References
 
-| Countries in the world by population (2023). Worldometer. (n.d.). Retrieved February 5, 
+| Countries in the world by population (2023). Worldometer. Retrieved February 5, 
 |     2023, from https://www.worldometers.info/world-population/population-by-country/
 
 | Information on more than 200,000 terrorist attacks. Global Terrorism Database. 
@@ -311,7 +311,7 @@ will have three bars representing different evaluation metrics for a model. Ther
 |    Retrieved February 5, 2023, from 
 |    https://www.kaggle.com/datasets/tmishinev/world-country-gdp-19602021 
 
-| National Consortium for  the Study of Terrorism and Responses to Terrorism. (n.d.). Global 
+| National Consortium for  the Study of Terrorism and Responses to Terrorism. Global 
 |    terrorism database. Kaggle. Retrieved February 5, 2023, from 
 |    https://www.kaggle.com/datasets/START-UMD/gtd 
 

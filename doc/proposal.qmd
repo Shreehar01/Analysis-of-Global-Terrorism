@@ -20,12 +20,10 @@ hijackings, and hostage situations, and can occur in any location, from urban ce
 Terrorist attacks have a profound impact on both the victims and the larger society; they cause physical 
 harm and loss of life, as well as emotional trauma and psychological distress. Needless to say, they can 
 have long-lasting socio-economic consequences, disrupting trade and commerce, causing job losses, and 
-decreasing investor confidence.
-
-Many nations have increased their efforts to prevent and counteract terrorism in response to these attacks, 
-which include stepping up their security protocols, improving their capacity for intelligence gathering and 
-analysis, and cooperating with other nations to share information and coordinate efforts. Despite these initiatives, 
-the threat of terrorism persists, with new organizations forming and established ones changing their strategies.
+decreasing investor confidence. Many nations have increased their efforts to prevent and counteract terrorism 
+in response to these attacks, which include stepping up their security protocols, improving their capacity for intelligence 
+gathering and analysis, and cooperating with other nations to share information and coordinate efforts. Despite these 
+initiatives, the threat of terrorism persists, with new organizations forming and established ones changing their strategies.
 
 In this project, different terrorist incidents that occurred in different regions of the world from 1970 to 2017 
 will be analyzed for getting insight into various aspects of the incidents like the regions, methods, targets, motive, 

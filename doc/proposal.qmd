@@ -12,30 +12,27 @@ jupyter: python3
 
 # Introduction
 
-Global terrorism has been a major concern for countries across the world for 
-many decades. Terrorist attacks are defined as acts of violence committed by 
-individuals or groups with the intention of causing harm and destruction to 
-a large number of people. These attacks can take many forms, including bombings, 
-mass shootings, hijackings, and hostage situations, and can occur in any location, 
-from urban centers to remote rural areas.
+Terrorist attacks - which are defined as the acts of violence committed by individuals or groups with the 
+intention of causing harm and destruction to a large number of people -  have been a major concern for countries 
+across the world for many decades now. These attacks can take many shapes, including bombings, mass shootings, 
+hijackings, and hostage situations, and can occur in any location, from urban centers to remote rural areas. 
 
-Terrorist attacks have a profound impact on both the victims and the larger society. 
-They cause physical harm and loss of life, as well as emotional trauma and 
-psychological distress. They can also have long-lasting socio-economic consequences, 
-disrupting trade and commerce, causing job losses, and decreasing investor confidence.
+Terrorist attacks have a profound impact on both the victims and the larger society; they cause physical 
+harm and loss of life, as well as emotional trauma and psychological distress. Needless to say, they can 
+have long-lasting socio-economic consequences, disrupting trade and commerce, causing job losses, and 
+decreasing investor confidence.
 
-In recent years, some of the most devastating terrorist attacks have occurred in cities 
-across the globe, such as Paris, Madrid, London, and New York. These attacks have 
-resulted in the loss of thousands of lives and have had a profound impact on the global 
-community. In response to these attacks, many countries have increased their efforts to 
-prevent and counteract terrorism, including by strengthening their security measures, 
-enhancing their intelligence gathering and analysis capabilities, and working together 
-with international partners to share information and coordinate efforts.
+Many nations have increased their efforts to prevent and counteract terrorism in response to these attacks, 
+which include stepping up their security protocols, improving their capacity for intelligence gathering and 
+analysis, and cooperating with other nations to share information and coordinate efforts. Despite these initiatives, 
+the threat of terrorism persists, with new organizations forming and established ones changing their strategies.
 
-Despite these efforts, the threat of terrorism continues to persist, with new groups 
-emerging and existing ones adapting their tactics. As the world becomes more interconnected, 
-the risk of terrorism spreading across borders increases, making it all the more important 
-for countries to work together to address this global challenge.
+In this project, different terrorist incidents that occurred in different regions of the world from 1970 to 2017 
+will be analyzed for getting insight into various aspects of the incidents like the regions, methods, targets, motive, 
+and the frequency of the terrorist attacks. In addition, the impact of these attacks on socioeconomic factors like the 
+GDP, migration, and population will also be analyzed. Lastly, this project will assess the efficiency of different 
+machine learning models in predicting the number of casualties from the existing incident data.
+
 
 # Datasets
 

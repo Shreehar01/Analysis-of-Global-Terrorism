@@ -34,11 +34,11 @@ machine learning models in predicting the number of casualties from the existing
 
 # Datasets
 
-In this project, three different datasets will be used to analyze different trends in terrorist 
+In this project, three different datasets will be used to analyze trends in terrorist 
 activities and their impact on the social and economic health of different countries.
 
 The first dataset - [Global Terrorism Database (GTD)](https://www.kaggle.com/datasets/START-UMD/gtd) 
-- is an open-source database tha includes information on more than 180,000 terrorist attacks around the 
+- is an open-source database that includes information on more than 180,000 terrorist attacks around the 
 world from 1970 through 2017. The database is maintained by researchers at the National Consortium for 
 the Study of Terrorism and Responses to Terrorism ([START](https://www.start.umd.edu/gtd/)), 
 headquartered at the University of Maryland. Prepared by reviewing more than 4,000,000 news articles 
@@ -85,19 +85,20 @@ dataset from the Worldometer website. The variables that will be used from this 
 
 # Data Acquisition and Processing
 
-For visualization, firstly, the variable names of all three datasets will be converted to camelcase to ensure
+For visualization, firstly, the variable names of all three datasets will be converted to title case to ensure
 uniformity. All the columns will be checked for the presence of null values and imputed with mean, median,
 and mode or their proportions (if applicable) with respect to the data types, the nature of distribution, and 
 applicable subgroups. Any column, except the motive column from the first dataset, will be dropped if the 
-percentage of null values exceeds 50. I will be spending a significant amount of time standardizing the names 
+percentage of null values exceeds 40. I will be spending a significant amount of time standardizing the names 
 of the countries in each of the datasets; dataset 1 will be taken as the reference. This will not only ensure
 that the process of joining datasets is easier but also avoid any confusion or conflicts regarding countries' 
 names in the visualization of data from different datasets.
 
 For the modeling phase, all the categorical variables like target types, names of the terrorist groups,
-countries, regions, etc will be encoded to numbers and the motive variable will be processed through Term Frequency -
-Inverse Document Frequency vectorization to extract the most common words. The processed data will then be split and used
-to train and test the models.
+countries, regions, etc will be encoded to numbers and the motive variable will be processed through the Term Frequency Vectorization
+and the Term Frequency - Inverse Document Frequency vectorization separately to extract the most common words. 
+The processed data from the two different aforementioned vectorization techniques will then be split and used to train and 
+test the models one at a time.
 
 # Research Questions and Methodology
 
@@ -113,11 +114,11 @@ that shows the frequency of occurence of attacks in each state. The gradient of 
 for each state will be proportional to the number of attacks.
 
 2. How has the motive of terrorist attacks shifted over the last five years in the US? 
-To answer this, I will first, create a dataframe that consists of rows representing 
-terrorist incidents in the US from 2012 - 2017 and then use the motive variable to plot the Word Cloud. 
-The plot will have the most repeated words for the motive and the size of the words will 
-represent the frequency of their occurrence. There will be five Word Clouds altogether, representing
-different years and they will be in a facet grid.
+To answer this, I will first, create five distinct distinct dataframes that consists of rows representing 
+terrorist incidents in the US in different decades from 1970 - 2017 and then use the motive variable to 
+plot the Word Cloud. The plot will have the most repeated words for the motive and the size of the words will 
+represent the frequency of their occurrence. There will be five Word Clouds altogether, each representing
+different decades.
 
 ### Focus on the world
 
@@ -130,14 +131,13 @@ be a single line, representing the number of terrorist attacks for the years 197
 4. Which geographical region has had the highest number of terrorist attacks? To answer this, 
 I will first, create a dataframe - using the groupby and count function based on region and event 
 id respectively - that lists the count of attacks for each of the geographical regions and then plot 
-a mosaic plot displaying the data. The plot will be filled with distinct colors for each of the 
-region and the size of the boxes representing each region will be proportional to their number 
-of attacks.
+a world map displaying the data. The plot will be filled with the same color and the scale of the color
+will be proportional to the number of attacks in a region.
 
 5. How does the frequency of attack types vary across geographical regions? To answer this, 
 I will first, create a dataframe - using the groupby and count function based on region and 
 attack type and event id respectively - that lists the count of different types of attacks 
-for each of the geographical regions and then plot a stacked bar plot displaying the data. All 
+for each of the geographical regions and then plot a filled bar plot displaying the data. All 
 the bars will have the same height and width and each of them will represent a distinct geographical 
 region. The bars will be filled with sub-bar plots of different colors, each of which will represent 
 the type of attack for the given region. The height of each of the sub-bar plots will be proportional 
@@ -146,15 +146,16 @@ to the frequency of the attack type.
 6. Which countries had the highest number of terrorist attacks? To answer this question, I will 
 first, create a dataframe - using the groupby and count function based on country and event id 
 respectively - that lists the count of attacks for each of the countries and then plot a bar plot 
-displaying the data. The plot will be filled with distinct colors for each of the top 10 countries 
+displaying the data. The plot will be filled with the same color for each of the top 10 countries 
 in descending order of the counts of attacks from left to right.
 
 7. Do the countries with the highest number of terrorist attacks also have the highest number of 
 people who were killed? To answer this question, I will first, create a dataframe - using the groupby 
 and sum function based on country and number of casualties respectively - that lists the number of people who 
-were killed from each of the countries and then plot a bar plot displaying the data. The plot will be 
-filled with distinct colors for each of the top 10 countries in descending order of the number of people 
-who were killed.
+were killed from each of the countries and then plot a scatter plot bar plot displaying the number of terrorist attacks
+on x-axis and number of people killed on y-axis. Each of the dots in the plot will represent a country.
+The dots for America and few other countries with interesting insights will highlighted with different colors and
+all the other dots will be filled with black.
 
 8. What are the most common groups targeted by terrorists? To answer this, I will 
 first, create a dataframe - using the groupby and count function based on the type of target and 
@@ -177,36 +178,37 @@ five countries with the highest number of terrorist attacks and calculate the nu
 attacks for each year for these countries by using the groupby and count function in country and year 
 and event id respectively. I will then join this dataframe with our second dataset based on year and 
 country column. The resulting data will be used in a line plot where the line will represent the number of 
-terrorist attacks for each year in a country. On the same line plot, another line indicating the GDP per capita 
+terrorist attacks for each year in a country. On the same line plot, another line indicating percentage change in the GDP per capita 
 of the country for each year will be plotted. The two lines will be of different colors and 
-to make sure that the lines are not of irregular scale (which is highly likely as GDP and the 
+to make sure that the lines are not of irregular scale (which is highly likely as percentage change in GDP and the 
 number of terrorist attacks differ largely in their magnitudes), both of them will be standardized to represent 
-the minimum value of each category as 0 and the maximum value as 1. Lastly, each of the countries will 
-have its own line plot and altogether, there will be 5 line plots in a facet grid. The trends in these 
-five terrorist-prone countries will give us a general indication of the existence of the relationship between 
+the minimum value of median global percentage change in GDP and the number of terrorist attacks as 0 and their maximum value 
+as 1. Lastly, each of the countries will have its own line plot and altogether, there will be five line plots in a facet grid. 
+The trends in these five terrorist-prone countries will give us a general indication of the existence of the relationship between 
 GDP per capita and the number of terrorist attacks.
 
 11. Is there any correlation between the net number of migrants and the number of terrorist attacks 
 in a country? To answer this question, I will join the dfCount dataframe from 10 with our third dataset 
 based on the year and country column. The resulting data (referred to as dfJoinedThird henceforth) will 
 be used in a line plot where the line will represent the number of terrorist attacks for each year in a 
-country. On the same line plot, another line indicating the net number of migrants in the country for 
+country. On the same line plot, another line indicating the percentage change in the number of migrants in the country for 
 each year will be plotted. The two lines will be of different color and to make sure that the lines are not 
 of irregular scale (which is highly likely as the net number of migrants and the number of terrorist attacks differ 
-largely in their magnitudes), both of them will be standardized to represent the minimum value of each category 
-as 0 and the maximum value as 1. Lastly, each of the countries will have its own line plot and altogether, 
-there will be 5 line plots on a facet grid. The trends in these five terrorist-prone countries will give us a 
-general indication of the existence of the relationship between net number of migrants and the number of terrorist attacks.
+largely in their magnitudes), both of them will be standardized to represent the minimum value of median global 
+percentage change in number of migrants and the number of terrorist attacks as 0 and their maximum value as 1. Lastly, each of the 
+countries will have its own line plot and altogether, there will be five line plots on a facet grid. The trends in these five 
+terrorist-prone countries will give us a general indication of the existence of the relationship between net number of migrants and the number of terrorist attacks.
 
 12. Is there any correlation between the fertility rate and the number of terrorist attacks in a country? 
 To answer this question, I will use the dataframe dfJoinedThird from 11 to plot in a line plot where the line 
 will represent the number of terrorist attacks for each year in a country. On the same line plot, another line 
-indicating the fertility rate of the country for each year will be plotted. The two lines will be of 
-different colors and to make sure that the lines are not of irregular scale (which is highly likely as fertility rate and 
+indicating the percentage change in fertility rate of the country for each year will be plotted. The two lines will be of 
+different colors and to make sure that the lines are not of irregular scale (which is highly likely as percentage change in fertility rate and 
 the number of terrorist attacks differ largely in their magnitudes), both of them will be standardized to represent the 
-minimum value of each category as 0 and the maximum value as 1. Lastly, each of the countries will have its own 
-line plot and altogether, there will be 5 line plots on a facet grid. The trends in these five terrorist-prone countries 
-will give us a general indication of the existence of the relationship between the fertility rate and the number of terrorist attacks.
+minimum value of median global percentage change in the fertility rate and the number of terrorist attacks as 0 and their maximum value as 1. 
+Lastly, each of the countries will have its own line plot and altogether, there will be five line plots on a facet grid. 
+The trends in these five terrorist-prone countries will give us a general indication of the existence of the relationship between the 
+fertility rate and the number of terrorist attacks.
 
 ### Modeling
 

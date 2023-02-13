@@ -107,14 +107,14 @@ The following questions will be answered in this project:
 ### Focus on the US
 
 1. Which states in the US had the highest number of terrorist attacks? To answer this, 
-I will first, create a dataframe - using the groupby and count function based on the 
+I will first, create a dataframe - using the groupby and count functions based on the 
 provstate and event id respectively - that lists the number of terrorist attacks in 
-each state, filter the dataframe to include data for the US, and then plot a choropleth map
-that shows the frequency of occurence of attacks in each state. The gradient of the color 
+each state, filter the dataframe to include data for the US and then plot a choropleth map
+that shows the frequency of occurrence of attacks in each state. The gradient of the color 
 for each state will be proportional to the number of attacks.
 
 2. How has the motive of terrorist attacks shifted over the last five years in the US? 
-To answer this, I will first, create five distinct distinct dataframes that consists of rows representing 
+To answer this, I will first, create five distinct dataframes that consist of rows representing 
 terrorist incidents in the US in different decades from 1970 - 2017 and then use the motive variable to 
 plot the Word Cloud. The plot will have the most repeated words for the motive and the size of the words will 
 represent the frequency of their occurrence. There will be five Word Clouds altogether, each representing
@@ -123,19 +123,19 @@ different decades.
 ### Focus on the world
 
 3. How has the frequency of terrorist attacks changed over the last five decades? To 
-answer this, I will first, create a dataframe - using the groupby and count function based 
+answer this, I will first, create a dataframe - using the groupby and count functions based 
 on the year and event id respectively - that lists the number of terrorist attacks in each 
-year and then plot an interactive line plot that shows the trend of the occurence. There will
+year and then plot an interactive line plot that shows the trend of the occurrence. There will
 be a single line, representing the number of terrorist attacks for the years 1970 - 2017.
 
 4. Which geographical region has had the highest number of terrorist attacks? To answer this, 
-I will first, create a dataframe - using the groupby and count function based on region and event 
+I will first, create a dataframe - using the groupby and count functions based on region and event 
 id respectively - that lists the count of attacks for each of the geographical regions and then plot 
 a world map displaying the data. The plot will be filled with the same color and the scale of the color
 will be proportional to the number of attacks in a region.
 
 5. How does the frequency of attack types vary across geographical regions? To answer this, 
-I will first, create a dataframe - using the groupby and count function based on region and 
+I will first, create a dataframe - using the groupby and count functions based on region and 
 attack type and event id respectively - that lists the count of different types of attacks 
 for each of the geographical regions and then plot a filled bar plot displaying the data. All 
 the bars will have the same height and width and each of them will represent a distinct geographical 
@@ -144,7 +144,7 @@ the type of attack for the given region. The height of each of the sub-bar plots
 to the frequency of the attack type.
 
 6. Which countries had the highest number of terrorist attacks? To answer this question, I will 
-first, create a dataframe - using the groupby and count function based on country and event id 
+first, create a dataframe - using the groupby and count functions based on country and event id 
 respectively - that lists the count of attacks for each of the countries and then plot a bar plot 
 displaying the data. The plot will be filled with the same color for each of the top 10 countries 
 in descending order of the counts of attacks from left to right.
@@ -153,36 +153,36 @@ in descending order of the counts of attacks from left to right.
 people who were killed? To answer this question, I will first, create a dataframe - using the groupby 
 and sum function based on country and number of casualties respectively - that lists the number of people who 
 were killed from each of the countries and then plot a scatter plot bar plot displaying the number of terrorist attacks
-on x-axis and number of people killed on y-axis. Each of the dots in the plot will represent a country.
-The dots for America and few other countries with interesting insights will highlighted with different colors and
+on x-axis and the number of people killed on y-axis. Each of the dots in the plot will represent a country.
+The dots for America and a few other countries with interesting insights will highlighted with different colors and
 all the other dots will be filled with black.
 
 8. What are the most common groups targeted by terrorists? To answer this, I will 
-first, create a dataframe - using the groupby and count function based on the type of target and 
+first, create a dataframe - using the groupby and count functions based on the type of target and 
 event id respectively - that lists the count of different types of targets and then plot a pie chart
 displaying the data. The pie chart will have five of the most common target types, each filled with a distinct color,
 and the rest of the types will be represented as "Others". 
 
 9. Which terrorist group is the deadliest (in terms of the number of people killed)? 
-To answer this, I will first, create a dataframe - using the groupby and sum function based on 
-group name and number of people killed respectively - that lists the number of people killed by each 
-terrorist groups and then plot a mosaic plot displaying the data. The plot will be filled with the same 
-color but of different sizes for each terrorist group, where the size of the boxes will be proportional 
-to the number of people they have killed.
+To answer this, I will first, create a dataframe - using the groupby and sum functions based on 
+group name and year and the number of people killed respectively - that lists the number of people killed by each 
+terrorist groups in each of the years from 1970 to 2017 and then plot a line plot displaying the data for the 10 terrorist groups with 
+the highest number of people killed in the aforementioned timeframe. The plot will have 10 lines, representing the terrorist groups
+and the x and y axis will represent the year and the number of people killed by a terrorist group respectively. 
 
 ### Focus on socioeconomic factors
 
 10. Is there any correlation between the GDP per capita and the number of terrorist attacks in a country? 
 To answer this question, I will create a dataframe (referred to as dfCount henceforth) by selecting 
-five countries with the highest number of terrorist attacks and calculate the number of terrorist 
-attacks for each year for these countries by using the groupby and count function in country and year 
-and event id respectively. I will then join this dataframe with our second dataset based on year and 
+five countries with the highest number of terrorists attacks and calculate the number of terrorist 
+attacks for each year for these countries by using the groupby and count functions in country and year 
+and event id respectively. I will then join this dataframe with our second dataset based on the year and 
 country column. The resulting data will be used in a line plot where the line will represent the number of 
-terrorist attacks for each year in a country. On the same line plot, another line indicating percentage change in the GDP per capita 
+terrorist attacks for each year in a country. On the same line plot, another line indicating the percentage change in the GDP per capita 
 of the country for each year will be plotted. The two lines will be of different colors and 
 to make sure that the lines are not of irregular scale (which is highly likely as percentage change in GDP and the 
 number of terrorist attacks differ largely in their magnitudes), both of them will be standardized to represent 
-the minimum value of median global percentage change in GDP and the number of terrorist attacks as 0 and their maximum value 
+the minimum value of the median global percentage change in GDP and the number of terrorist attacks as 0 and their maximum value 
 as 1. Lastly, each of the countries will have its own line plot and altogether, there will be five line plots in a facet grid. 
 The trends in these five terrorist-prone countries will give us a general indication of the existence of the relationship between 
 GDP per capita and the number of terrorist attacks.
@@ -195,15 +195,15 @@ country. On the same line plot, another line indicating the percentage change in
 each year will be plotted. The two lines will be of different color and to make sure that the lines are not 
 of irregular scale (which is highly likely as the net number of migrants and the number of terrorist attacks differ 
 largely in their magnitudes), both of them will be standardized to represent the minimum value of median global 
-percentage change in number of migrants and the number of terrorist attacks as 0 and their maximum value as 1. Lastly, each of the 
+percentage change in the number of migrants and the number of terrorist attacks as 0 and their maximum value as 1. Lastly, each of the 
 countries will have its own line plot and altogether, there will be five line plots on a facet grid. The trends in these five 
-terrorist-prone countries will give us a general indication of the existence of the relationship between net number of migrants and the number of terrorist attacks.
+terrorist-prone countries will give us a general indication of the existence of the relationship between the net number of migrants and the number of terrorist attacks.
 
 12. Is there any correlation between the fertility rate and the number of terrorist attacks in a country? 
 To answer this question, I will use the dataframe dfJoinedThird from 11 to plot in a line plot where the line 
 will represent the number of terrorist attacks for each year in a country. On the same line plot, another line 
 indicating the percentage change in fertility rate of the country for each year will be plotted. The two lines will be of 
-different colors and to make sure that the lines are not of irregular scale (which is highly likely as percentage change in fertility rate and 
+different colors and to make sure that the lines are not of irregular scale (which is highly likely as the percentage change in fertility rate and 
 the number of terrorist attacks differ largely in their magnitudes), both of them will be standardized to represent the 
 minimum value of median global percentage change in the fertility rate and the number of terrorist attacks as 0 and their maximum value as 1. 
 Lastly, each of the countries will have its own line plot and altogether, there will be five line plots on a facet grid. 
@@ -227,7 +227,7 @@ will have three bars representing different evaluation metrics for a model. Ther
 
 **Week 4 (2/6 - 2/12):** 
 
-* Animation of chloropeth map for the introduction (2 hours)
+* Animation of chloropleth map for the introduction (2 hours)
 * Data Tidying (3 hours)
 * Question 1 (2 hours)
 
@@ -308,7 +308,7 @@ will have three bars representing different evaluation metrics for a model. Ther
 |    Retrieved February 5, 2023, from 
 |    https://www.kaggle.com/datasets/tmishinev/world-country-gdp-19602021 
 
-| National Consortium for  the Study of Terrorism and Responses to Terrorism. Global 
+| National Consortium for the Study of Terrorism and Responses to Terrorism. Global 
 |    terrorism database. Kaggle. Retrieved February 5, 2023, from 
 |    https://www.kaggle.com/datasets/START-UMD/gtd 
 

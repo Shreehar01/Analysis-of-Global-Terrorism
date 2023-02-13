@@ -2,7 +2,7 @@
 title: "Proposal: Analysis of Global Terrorist Attacks"
 subtitle: "DATA 450 Capstone"
 author: "Shreehar Joshi"
-date: 02/05/2023
+date: 02/13/2023
 bibliography: references.bib
 number-sections: true
 format:
@@ -125,8 +125,8 @@ different decades.
 3. How has the frequency of terrorist attacks changed over the last five decades? To 
 answer this, I will first, create a dataframe - using the groupby and count functions based 
 on the year and event id respectively - that lists the number of terrorist attacks in each 
-year and then plot an interactive line plot that shows the trend of the occurrence. There will
-be a single line, representing the number of terrorist attacks for the years 1970 - 2017.
+year and then plot an interactive bar plot that shows the trend of the occurrence. Each of the bars
+will represent the number of terrorist attacks for any given year from 1970 to 2017.
 
 4. Which geographical region has had the highest number of terrorist attacks? To answer this, 
 I will first, create a dataframe - using the groupby and count functions based on region and event 
@@ -151,10 +151,9 @@ in descending order of the counts of attacks from left to right.
 
 7. Do the countries with the highest number of terrorist attacks also have the highest number of 
 people who were killed? To answer this question, I will first, create a dataframe - using the groupby 
-and sum function based on country and number of casualties respectively - that lists the number of people who 
-were killed from each of the countries and then plot a scatter plot bar plot displaying the number of terrorist attacks
-on x-axis and the number of people killed on y-axis. Each of the dots in the plot will represent a country.
-The dots for America and a few other countries with interesting insights will highlighted with different colors and
+and sum function based on country and number of attacks and casualties respectively - that lists the number of people who 
+were killed and the number of attacks in each of the countries and then plot a scatter plot bar plot displaying the number of terrorist attacks on x-axis and the number of people killed on y-axis. Each of the dots in the plot will represent a country.
+The dots for the US and a few other countries with interesting insights will highlighted with different colors and
 all the other dots will be filled with black.
 
 8. What are the most common groups targeted by terrorists? To answer this, I will 
@@ -167,7 +166,7 @@ and the rest of the types will be represented as "Others".
 To answer this, I will first, create a dataframe - using the groupby and sum functions based on 
 group name and year and the number of people killed respectively - that lists the number of people killed by each 
 terrorist groups in each of the years from 1970 to 2017 and then plot a line plot displaying the data for the 10 terrorist groups with 
-the highest number of people killed in the aforementioned timeframe. The plot will have 10 lines, representing the terrorist groups
+the highest number of people killed in the aforementioned timeframe. The plot will have 10 lines, each representing different terrorist groups
 and the x and y axis will represent the year and the number of people killed by a terrorist group respectively. 
 
 ### Focus on socioeconomic factors
@@ -193,7 +192,7 @@ based on the year and country column. The resulting data (referred to as dfJoine
 be used in a line plot where the line will represent the number of terrorist attacks for each year in a 
 country. On the same line plot, another line indicating the percentage change in the number of migrants in the country for 
 each year will be plotted. The two lines will be of different color and to make sure that the lines are not 
-of irregular scale (which is highly likely as the net number of migrants and the number of terrorist attacks differ 
+of irregular scale (which is highly likely as the percentage change in the number of migrants migrants and the number of terrorist attacks differ 
 largely in their magnitudes), both of them will be standardized to represent the minimum value of median global 
 percentage change in the number of migrants and the number of terrorist attacks as 0 and their maximum value as 1. Lastly, each of the 
 countries will have its own line plot and altogether, there will be five line plots on a facet grid. The trends in these five 

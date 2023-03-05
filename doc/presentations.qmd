@@ -1,0 +1,392 @@
+---
+title: "Analysis of Global Terrorism"
+author: "Shreehar Joshi"
+format:
+    revealjs: 
+        theme: dark
+title-slide-attributes:
+    data-background-image: ./terrorism.jpg
+    data-background-size: contain
+    data-background-opacity: "0.5"
+---
+
+## Contents
+<hr>
+- Introduction
+- Datasets
+- Progress
+- Setbacks
+- Future Works
+
+## Introduction
+<hr>
+
+- Acts of violence with intentions of causing harm
+- Catastrophic effects on people's lives
+- Terrorist incidents from 1970 - 2017 are analyzed
+- Questions: Region, Country, Group, Method, Target etc
+- Effects of terrorism on GDP, Migration and Fertility Rate
+
+## Datasets
+::: {.panel-tabset}
+
+### Dataset 1
+<b style="font: 24px;">Global Terrorism Database (GTD)</b><br/>
+<div style="font-size: medium; margin-top: 10px; margin-left: 40px;">
+Columns:
+<li> iyear: The year in which the incident occurred </li>
+<li> country_txt: The country name in which the incident occurred </li>
+<li> region_txt: The geographic region in which the incident occurred </li>
+<li> prov_state: The name of the 1st order subnational administrative region </li>
+<li> city: The city in which the incident occurred </li>
+<li> latitude: The latitude of the city in which the incident occurred </li>
+<li> longitude: The longitude of the city in which the incident occurred </li>
+<li> suicide: A flag indicating if the incident was a suicide attack </li>
+<li> attacktype1_txt: The general method of attack and broad class of tactic used </li>
+<li> targtype1_txt: The general type of the target/victim </li>
+<li> gname: The name of the group that carried out the attack </li>
+<li> motive: The motive of the terrorist attacks </li>
+<li> weaptype1_txt: The general type of the weapon used in the incident </li>
+<li> nkill: The total number of confirmed fatalities for the incident </li>
+</div>
+
+### Dataset 2
+<b style="font: 24px;">World, Region, Country GDP/GDP per capita</b><br/>
+<div style="font-size: medium; margin-top: 10px; margin-left: 40px;">
+Columns:
+<li> Country Name: The name of the country </li>
+<li> Country Code: The three-letter codes for the countries </li>
+<li> year: The year for which the GDP data is recorded </li>
+<li> GDP_per_capita: GDP per capita for a specific country in the given year </li> 
+</div>
+
+### Dataset 3
+<b style="font: 24px;">World Population</b><br/>
+<div style="font-size: medium; margin-top: 10px; margin-left: 40px;">
+Columns:
+<li> Year: The year for which the population data is recorded</li>
+<li> Migrants(net): The net number of migrants in a country</li>
+<li> FertlityRate: The fertility rate of a specific country</li>
+</div>
+:::
+
+
+## Progress
+<hr>
+
+```{python}
+import pandas as pd
+import numpy as np
+import plotly.express as px
+import nltk
+from sklearn.preprocessing import RobustScaler, MinMaxScaler
+from sklearn.model_selection import train_test_split, cross_val_score, GridSearchCV, KFold, StratifiedKFold, RandomizedSearchCV
+from sklearn.linear_model import LinearRegression, SGDRegressor
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.svm import SVR
+from sklearn import neighbors
+from xgboost import XGBRegressor
+from sklearn.ensemble import ExtraTreesRegressor
+
+#nltk.download('stopwords')
+
+import warnings
+warnings.filterwarnings("ignore", category=FutureWarning)
+
+df_attacks = pd.read_csv("../data/globalterrorismdb_0718dist.csv", encoding="ISO-8859-1", low_memory=False)
+df_attacks.head()
+df_attacks = df_attacks[['eventid','iyear', 'imonth', 'iday', 'country_txt', 'region_txt', 
+'provstate', 'city', 'latitude', 'longitude', 'suicide', 'attacktype1_txt', 'targtype1_txt', 
+'gname', 'motive', 'weaptype1_txt', 'nkill']]
+df_attacks.rename(columns={"eventid": "Event ID", "iyear": "Year", "imonth": "Month", 
+"country_txt": "Country", "region_txt": "Region", "provstate": "Province/State", "city": "City", "latitude": "Latitude", 
+"longitude": "Longitude", "suicide": "Suicide", "attacktype1_txt": "Attack Type",
+"targtype1_txt": "Target Type", "gname": "Terrorist Group", "motive": "Motive", 
+"weaptype1_txt": "Weapon Type", "nkill": "Casualties"}, inplace=True)
+
+df_population = pd.read_csv("../data/population.csv")
+df_population = df_population[["Country","Year", "Migrants(net)", "FertilityRate"]]
+df_population.rename(columns= {"FertilityRate": "Fertility Rate", "Migrants(net)": "Migrants (net)"}, inplace=True)
+
+df_gdp = pd.read_csv("../data/world_country_gdp_usd.csv")
+df_gdp = df_gdp[['Country Name','year', 'GDP_USD']]
+df_gdp.rename(columns= {"Country Name": "Country", "year": "Year", "GDP_USD":"GDP (in USD)"}, inplace=True)
+
+df_us_population = pd.read_csv("../data/us_population.csv")
+df_us_population = df_us_population[["state", "pop2022"]]
+df_us_population.rename(columns= {"state": "State", "pop2022": "Population"}, inplace=True) 
+
+fig = px.scatter_geo(df_attacks, lon="Longitude", lat="Latitude", animation_frame="Year", color="Region",
+                     projection="equirectangular", animation_group="Year", title="Terrorist Attacks (1970 - 2017)")
+fig.update_layout(title_x=0.44)
+fig.update_layout(height=600, margin={"r":0,"t":60,"l":0,"b":0})
+fig.show()
+```
+
+## Progress
+<hr>
+
+```{python}
+us_states = np.asarray(['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA',
+                        'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA',
+                        'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY',
+                        'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX',
+                        'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'])
+us_state_to_abbrev = {
+    "Alabama": "AL",
+    "Alaska": "AK",
+    "Arizona": "AZ",
+    "Arkansas": "AR",
+    "California": "CA",
+    "Colorado": "CO",
+    "Connecticut": "CT",
+    "Delaware": "DE",
+    "Florida": "FL",
+    "Georgia": "GA",
+    "Hawaii": "HI",
+    "Idaho": "ID",
+    "Illinois": "IL",
+    "Indiana": "IN",
+    "Iowa": "IA",
+    "Kansas": "KS",
+    "Kentucky": "KY",
+    "Louisiana": "LA",
+    "Maine": "ME",
+    "Maryland": "MD",
+    "Massachusetts": "MA",
+    "Michigan": "MI",
+    "Minnesota": "MN",
+    "Mississippi": "MS",
+    "Missouri": "MO",
+    "Montana": "MT",
+    "Nebraska": "NE",
+    "Nevada": "NV",
+    "New Hampshire": "NH",
+    "New Jersey": "NJ",
+    "New Mexico": "NM",
+    "New York": "NY",
+    "North Carolina": "NC",
+    "North Dakota": "ND",
+    "Ohio": "OH",
+    "Oklahoma": "OK",
+    "Oregon": "OR",
+    "Pennsylvania": "PA",
+    "Rhode Island": "RI",
+    "South Carolina": "SC",
+    "South Dakota": "SD",
+    "Tennessee": "TN",
+    "Texas": "TX",
+    "Utah": "UT",
+    "Vermont": "VT",
+    "Virginia": "VA",
+    "Washington": "WA",
+    "West Virginia": "WV",
+    "Wisconsin": "WI",
+    "Wyoming": "WY",
+    "District of Columbia": "DC",
+    "American Samoa": "AS",
+    "Guam": "GU",
+    "Northern Mariana Islands": "MP",
+    "Puerto Rico": "PR",
+    "United States Minor Outlying Islands": "UM",
+    "U.S. Virgin Islands": "VI",
+}
+df_attacks_us = df_attacks[df_attacks["Country"] == "United States"] 
+df_attacks_us = pd.DataFrame(df_attacks_us.groupby("Province/State")["Event ID"].count())
+df_attacks_us = df_attacks_us.reset_index()
+df_attacks_us.rename(columns={"Province/State": "State", "Event ID": "Number of Terrorist Attacks"}, inplace=True)
+df_attacks_us = df_attacks_us[df_attacks_us["State"] != "Unknown"]
+df_attacks_us["State Code"] = df_attacks_us["State"].apply(lambda x: us_state_to_abbrev[x])
+
+def scale_column(df, column, minVal=float('-inf'), maxVal=float('inf')):
+    if minVal == float('-inf'):
+        minVal = min(df[column])
+    if maxVal == float('inf'):
+        maxVal = max(df[column])
+    res = []
+    for val in df[column]:
+        res.append((val - minVal) / (maxVal - minVal))
+    return res
+
+df_us_population.head()
+df_attacks_us = df_attacks_us.merge(df_us_population[['State', 'Population']])
+df_attacks_us["Number of Terrorist Attacks (Standardised)"] = df_attacks_us["Number of Terrorist Attacks"] / df_attacks_us["Population"]
+tempVal = scale_column(df_attacks_us, "Number of Terrorist Attacks (Standardised)")
+df_attacks_us["Number of Terrorist Attacks (Standardised)"] = tempVal
+
+fig = px.choropleth(df_attacks_us, locations='State Code', color='Number of Terrorist Attacks (Standardised)',
+                    color_continuous_scale="Viridis",
+                    locationmode="USA-states", 
+                    scope="usa",
+                    labels={'Number of Terrorist Attacks':'Number of Terrorist Attacks'},
+                    title="Terrorist Attacks in the US (1970-2017)")
+fig.update_layout(title_x=0.44)
+fig.show()
+```
+
+## Progress
+<hr>
+
+```{python}
+yearly_freq = pd.DataFrame(df_attacks.groupby("Year")["Event ID"].count()).reset_index()
+yearly_freq.rename(columns={"Event ID": "Number of Terrorist Attacks"}, inplace=True)
+fig = px.bar(yearly_freq, x=yearly_freq["Year"], y=yearly_freq["Number of Terrorist Attacks"], height=400, title="Frequency of Terrorist Attacks (1970-2017)")
+fig.update_layout(title_x=0.5)
+fig.show()
+```
+
+## Progress
+<hr>
+
+```{python}
+yearly_freq = pd.DataFrame(df_attacks.groupby("Year")["Event ID"].count()).reset_index()
+yearly_freq.rename(columns={"Event ID": "Number of Terrorist Attacks"}, inplace=True)
+fig = px.bar(yearly_freq, x=yearly_freq["Year"], y=yearly_freq["Number of Terrorist Attacks"], height=400, title="Frequency of Terrorist Attacks (1970-2017)")
+fig.update_layout(title_x=0.5)
+fig.show()
+```
+
+
+## Progress
+<hr>
+
+```{python}
+region_freq = pd.DataFrame(df_attacks.groupby("Region")["Event ID"].count()).reset_index()
+region_freq.rename(columns={"Event ID": "Number of Terrorist Attacks"}, inplace=True)
+region_freq = region_freq.sort_values(by="Number of Terrorist Attacks", ascending=False)
+fig = px.bar(region_freq, x=region_freq["Region"], y=region_freq["Number of Terrorist Attacks"], height=400, title="Region-wise Frequency of Terrorist Attacks (1970-2017)")
+fig.update_layout(title_x=0.5)
+fig.show()
+```
+
+
+## Progress
+<hr>
+
+```{python}
+region_freq = pd.DataFrame(df_attacks.groupby("Region")["Event ID"].count()).reset_index()
+region_freq.rename(columns={"Event ID": "Number of Terrorist Attacks"}, inplace=True)
+region_freq = region_freq.sort_values(by="Number of Terrorist Attacks", ascending=False)
+fig = px.bar(region_freq, x=region_freq["Region"], y=region_freq["Number of Terrorist Attacks"], height=400, title="Region-wise Frequency of Terrorist Attacks (1970-2017)")
+fig.update_layout(title_x=0.5)
+fig.show()
+```
+
+
+## Progress
+<hr>
+
+```{python}
+region_freq = pd.DataFrame(df_attacks.groupby(["Region", "Attack Type"])["Event ID"].count()).reset_index()
+region_freq.rename(columns={"Event ID": "Number of Terrorist Attacks"}, inplace=True)
+region_freq = region_freq.sort_values(by="Number of Terrorist Attacks", ascending=False)
+fig = px.bar(region_freq, x=region_freq["Region"], y=region_freq["Number of Terrorist Attacks"], color="Attack Type", height=400, title="Attack Types in Different Regions")
+fig.update_layout(barmode="stack")
+fig.update_layout(title_x=0.5)
+fig.show()
+```
+
+## Progress
+<hr>
+
+```{python}
+country_freq = pd.DataFrame(df_attacks.groupby("Country")["Event ID"].count()).reset_index()
+country_freq.rename(columns={"Event ID": "Number of Terrorist Attacks"}, inplace=True)
+country_freq = country_freq.sort_values(by="Number of Terrorist Attacks", ascending=False)[:10]
+fig = px.bar(country_freq, x=country_freq["Country"], y=country_freq["Number of Terrorist Attacks"], height=400, title="Countries with Highest Number of Terrorist Attacks")
+fig.update_layout(title_x=0.5)
+fig.show()
+```
+
+## Progress
+<hr>
+
+```{python}
+casualty_freq = pd.DataFrame(df_attacks.groupby("Country")["Casualties"].sum()).reset_index()
+casualty_freq = casualty_freq.sort_values(by="Casualties", ascending=False)[:10]
+fig = px.bar(casualty_freq, x=casualty_freq["Country"], y=casualty_freq["Casualties"], height=400, title="Countries with Highest Number of Casualties")
+fig.update_layout(title_x=0.5)
+fig.show()
+```
+
+## Progress
+<hr>
+
+```{python}
+TOP_N = 5
+target_freq = pd.DataFrame(df_attacks.groupby("Target Type")["Event ID"].count()).reset_index()
+target_freq.rename(columns={"Event ID": "Number of Terrorist Attacks"}, inplace=True)
+rem_freq = target_freq.sort_values(by="Number of Terrorist Attacks", ascending=False)[TOP_N:]
+target_freq = target_freq.sort_values(by="Number of Terrorist Attacks", ascending=False)[:TOP_N]
+others_row = {"Target Type": "Others", "Number of Terrorist Attacks": rem_freq["Number of Terrorist Attacks"].sum()}
+target_freq = target_freq.append(others_row, ignore_index=True)
+fig = px.pie(target_freq, values='Number of Terrorist Attacks', hole=.4, names='Target Type', height=400, title="Target Types")
+fig.update_layout(title_x=0.445)
+fig.show()
+```
+
+## Progress
+<hr>
+
+```{python}
+groupwise_casualty_freq = pd.DataFrame(df_attacks.groupby("Terrorist Group")["Casualties"].sum()).reset_index()
+groupwise_casualty_freq = groupwise_casualty_freq.sort_values(by="Casualties", ascending=False)[:16]
+notorious_groups = list(groupwise_casualty_freq["Terrorist Group"])
+df_notorious_groups = df_attacks[df_attacks["Terrorist Group"].isin(notorious_groups)]
+df_notorious_groups = pd.DataFrame(df_notorious_groups.groupby(["Terrorist Group", "Year"])["Casualties"].sum().reset_index())
+fig = px.line(df_notorious_groups, x="Year", y="Casualties", color="Terrorist Group", title='Attacks by different Terrorist Groups')
+fig.update_layout(title_x=0.40)
+fig.update_layout(height=600, margin={"r":0,"t":60,"l":0,"b":0})
+fig.show()
+```
+
+## Progress
+<hr>
+
+```{python}
+df_countries_casualties = pd.DataFrame(df_attacks.groupby(["Country"])["Casualties"].sum().reset_index())
+df_countries_terrorist_count = pd.DataFrame(df_attacks.groupby(["Country"])["Event ID"].count().reset_index())
+df_countries_terrorist_count.rename(columns={"Event ID": "Number of Terrorist Attacks"}, inplace=True)
+df_merged_casualties_count = df_countries_casualties.merge(df_countries_terrorist_count[["Country", "Number of Terrorist Attacks"]])
+fig = px.scatter(df_merged_casualties_count, x="Number of Terrorist Attacks", y="Casualties", title="Country-specific Attacks and Casualties", hover_data=["Country"])
+fig.update_layout(title_x=0.50)
+fig.show()
+```
+
+## Progress
+<hr>
+
+```{python}
+df_iso_codes = px.data.gapminder()[["country", "iso_alpha"]]
+df_iso_codes.rename(columns={"country": "Country", "iso_alpha": "Country Code"}, inplace=True)
+df_iso_codes.drop_duplicates(inplace=True)
+df_iso_codes = df_iso_codes.reset_index()
+df_iso_codes.drop(["index"], axis=1, inplace=True)
+df_countries_terrorist_count = df_countries_terrorist_count.merge(df_iso_codes[['Country', 'Country Code']])
+fig = px.choropleth(df_countries_terrorist_count, locations="Country Code",
+                    color="Number of Terrorist Attacks",
+                    hover_name="Country",
+                    color_continuous_scale=px.colors.sequential.Plasma,
+                    title="Terrorist Attacks (1970 - 2017)")
+fig.update_layout(title_x=0.44)
+fig.update_layout(height=600, margin={"r":0,"t":60,"l":0,"b":0})
+fig.show()
+```
+
+## Setbacks
+<hr>
+- Reading Files
+- Git Large File Storage
+- Resizing Plots
+- Standardizing Data
+- Quarto Presentation
+
+
+## Future Work
+<hr>
+- Finalizing word cloud for motives of terrorst attacks
+- Analyzing terrorism's effect on socio-economic factors
+- Modeling to predict the number of casualties
+- Visualization for ranking of terrorist groups

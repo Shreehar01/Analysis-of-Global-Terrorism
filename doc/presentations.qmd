@@ -4,9 +4,10 @@ author: "Shreehar Joshi"
 format:
     revealjs: 
         theme: dark
+        logo: ./logo.png
 title-slide-attributes:
     data-background-image: ./terrorism.jpg
-    data-background-size: contain
+    data-background-size: cover
     data-background-opacity: "0.5"
 ---
 
@@ -266,19 +267,6 @@ fig.show()
 <hr>
 
 ```{python}
-region_freq = pd.DataFrame(df_attacks.groupby("Region")["Event ID"].count()).reset_index()
-region_freq.rename(columns={"Event ID": "Number of Terrorist Attacks"}, inplace=True)
-region_freq = region_freq.sort_values(by="Number of Terrorist Attacks", ascending=False)
-fig = px.bar(region_freq, x=region_freq["Region"], y=region_freq["Number of Terrorist Attacks"], height=400, title="Region-wise Frequency of Terrorist Attacks (1970-2017)")
-fig.update_layout(title_x=0.5)
-fig.show()
-```
-
-
-## Progress
-<hr>
-
-```{python}
 region_freq = pd.DataFrame(df_attacks.groupby(["Region", "Attack Type"])["Event ID"].count()).reset_index()
 region_freq.rename(columns={"Event ID": "Number of Terrorist Attacks"}, inplace=True)
 region_freq = region_freq.sort_values(by="Number of Terrorist Attacks", ascending=False)
@@ -381,7 +369,6 @@ fig.show()
 - Git Large File Storage
 - Resizing Plots
 - Standardizing Data
-- Quarto Presentation
 
 
 ## Future Work
@@ -390,3 +377,8 @@ fig.show()
 - Analyzing terrorism's effect on socio-economic factors
 - Modeling to predict the number of casualties
 - Visualization for ranking of terrorist groups
+
+## 
+<h1 style="position: absolute; top: 50%; transform: translate(0, -50%); padding: 10px; left: 30%;">
+Feedbacks?
+<h2>

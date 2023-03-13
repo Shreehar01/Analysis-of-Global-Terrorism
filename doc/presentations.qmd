@@ -4,14 +4,14 @@ author: "Shreehar Joshi"
 format:
     revealjs: 
         theme: dark
-        logo: ./logo.png
+        logo: ./ramapo-logo.png
 title-slide-attributes:
     data-background-image: ./terrorism.jpg
     data-background-size: cover
     data-background-opacity: "0.5"
 ---
 
-## Contents
+## Contents {background-image="./background.jpg"}
 <hr>
 - Introduction
 - Datasets
@@ -19,16 +19,16 @@ title-slide-attributes:
 - Setbacks
 - Future Works
 
-## Introduction
+## Introduction {background-image="./background.jpg"}
 <hr>
 
 - Acts of violence with intentions of causing harm
 - Catastrophic effects on people's lives
 - Terrorist incidents from 1970 - 2017 are analyzed
-- Questions: Region, Country, Group, Method, Target etc
+- Questions: Region, Country, Group, Method, Target, etc of terrorist attacks
 - Effects of terrorism on GDP, Migration and Fertility Rate
 
-## Datasets
+## Datasets {background-image="./background.jpg"}
 ::: {.panel-tabset}
 
 ### Dataset 1
@@ -72,7 +72,7 @@ Columns:
 :::
 
 
-## Progress
+## Progress {background-image="./background.jpg"}
 <hr>
 
 ```{python}
@@ -126,7 +126,7 @@ fig.update_layout(height=600, margin={"r":0,"t":60,"l":0,"b":0})
 fig.show()
 ```
 
-## Progress
+## Progress {background-image="./background.jpg"}
 <hr>
 
 ```{python}
@@ -227,7 +227,7 @@ fig.update_layout(title_x=0.44)
 fig.show()
 ```
 
-## Progress
+## Progress {background-image="./background.jpg"}
 <hr>
 
 ```{python}
@@ -238,19 +238,7 @@ fig.update_layout(title_x=0.5)
 fig.show()
 ```
 
-## Progress
-<hr>
-
-```{python}
-yearly_freq = pd.DataFrame(df_attacks.groupby("Year")["Event ID"].count()).reset_index()
-yearly_freq.rename(columns={"Event ID": "Number of Terrorist Attacks"}, inplace=True)
-fig = px.bar(yearly_freq, x=yearly_freq["Year"], y=yearly_freq["Number of Terrorist Attacks"], height=400, title="Frequency of Terrorist Attacks (1970-2017)")
-fig.update_layout(title_x=0.5)
-fig.show()
-```
-
-
-## Progress
+## Progress {background-image="./background.jpg"}
 <hr>
 
 ```{python}
@@ -263,7 +251,7 @@ fig.show()
 ```
 
 
-## Progress
+## Progress {background-image="./background.jpg"}
 <hr>
 
 ```{python}
@@ -276,7 +264,7 @@ fig.update_layout(title_x=0.5)
 fig.show()
 ```
 
-## Progress
+## Progress {background-image="./background.jpg"}
 <hr>
 
 ```{python}
@@ -288,18 +276,21 @@ fig.update_layout(title_x=0.5)
 fig.show()
 ```
 
-## Progress
+## Progress {background-image="./background.jpg"}
 <hr>
 
 ```{python}
-casualty_freq = pd.DataFrame(df_attacks.groupby("Country")["Casualties"].sum()).reset_index()
-casualty_freq = casualty_freq.sort_values(by="Casualties", ascending=False)[:10]
-fig = px.bar(casualty_freq, x=casualty_freq["Country"], y=casualty_freq["Casualties"], height=400, title="Countries with Highest Number of Casualties")
-fig.update_layout(title_x=0.5)
+df_countries_casualties = pd.DataFrame(df_attacks.groupby(["Country"])["Casualties"].sum().reset_index())
+df_countries_terrorist_count = pd.DataFrame(df_attacks.groupby(["Country"])["Event ID"].count().reset_index())
+df_countries_terrorist_count.rename(columns={"Event ID": "Number of Terrorist Attacks"}, inplace=True)
+df_merged_casualties_count = df_countries_casualties.merge(df_countries_terrorist_count[["Country", "Number of Terrorist Attacks"]])
+fig = px.scatter(df_merged_casualties_count, x="Number of Terrorist Attacks", y="Casualties", title="Country-specific Attacks and Casualties", hover_data=["Country"])
+fig.update_layout(title_x=0.50)
 fig.show()
 ```
 
-## Progress
+
+## Progress {background-image="./background.jpg"}
 <hr>
 
 ```{python}
@@ -311,11 +302,73 @@ target_freq = target_freq.sort_values(by="Number of Terrorist Attacks", ascendin
 others_row = {"Target Type": "Others", "Number of Terrorist Attacks": rem_freq["Number of Terrorist Attacks"].sum()}
 target_freq = target_freq.append(others_row, ignore_index=True)
 fig = px.pie(target_freq, values='Number of Terrorist Attacks', hole=.4, names='Target Type', height=400, title="Target Types")
-fig.update_layout(title_x=0.445)
+fig.update_layout(title_x=0.425)
 fig.show()
 ```
 
-## Progress
+## Progress {background-image="./background.jpg"}
+<hr>
+:::: {.columns}
+::: {.column width="50%"}
+```{python}
+stpwrd = nltk.corpus.stopwords.words('english')
+stpwrd.extend(["specific",  "motive", "unknown", "Unknown", "incident", "claimed", "responsibility", "however", "unaffiliated", "individual", "identified", "killed", "stated", "anti", "attacks", "protest", "carried", "attack", "trend", "larger", "may", "part", "following", "community", "sources", "violence", "targeting", "noted", "posited", "suspected", "targeting", "members", "noted", "targeted", "also", "assailant", "perpetrator", "meant", "bring attention", "practice", "perpetrator", "assailant", "meant"])
+
+df_attacks_us = df_attacks[df_attacks["Country"] == "United States"]
+df_attacks_us = df_attacks_us[["Year", "Motive"]]
+df_attacks_us = df_attacks_us.dropna()
+
+temp_df = df_attacks_us[(df_attacks_us["Year"] >= 1970) & (df_attacks_us["Year"] < (2000))]
+motive = list(temp_df["Motive"].values)
+motive = " ".join(motive)
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+
+wordcloud = WordCloud(width=800, height=600,
+                background_color ='white', 
+                stopwords=stpwrd,
+                min_font_size = 10).generate(motive)
+plt.figure(figsize = (6, 6), facecolor = None) 
+plt.imshow(wordcloud) 
+plt.axis("off")
+plt.tight_layout(pad = 2)
+plt.title("Attack Motives (" + str(1970) + " - " + str(2000) + ")", fontdict={'fontsize': 36})
+plt.show()
+```
+:::
+
+::: {.column width="50%"}
+```{python}
+stpwrd = nltk.corpus.stopwords.words('english')
+stpwrd.extend(["specific",  "motive", "unknown", "Unknown", "incident", "claimed", "responsibility", "however", "unaffiliated", "individual", "identified", "killed", "stated", "anti", "attacks", "protest", "carried", "attack", "trend", "larger", "may", "part", "following", "community", "sources", "violence", "targeting", "noted", "posited", "suspected", "targeting", "members", "noted", "targeted", "also", "assailant", "perpetrator", "meant", "bring attention", "practice", "perpetrator", "assailant", "meant"])
+
+
+df_attacks_us = df_attacks[df_attacks["Country"] == "United States"]
+df_attacks_us = df_attacks_us[["Year", "Motive"]]
+df_attacks_us = df_attacks_us.dropna()
+
+temp_df = df_attacks_us[(df_attacks_us["Year"] >= 2000) & (df_attacks_us["Year"] <= (2017))]
+motive = list(temp_df["Motive"].values)
+motive = " ".join(motive)
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+
+wordcloud = WordCloud(width=800, height=600,
+                background_color ='white', 
+                stopwords=stpwrd,
+                min_font_size = 10).generate(motive)
+plt.figure(figsize = (6, 6), facecolor = None) 
+plt.imshow(wordcloud) 
+plt.axis("off")
+plt.tight_layout(pad = 2)
+plt.title("Attack Motives (" + str(2000) + " - " + str(2017) + ")", fontdict={'fontsize': 36})
+plt.show()
+```
+:::
+
+::::
+
+## Progress {background-image="./background.jpg"}
 <hr>
 
 ```{python}
@@ -330,20 +383,7 @@ fig.update_layout(height=600, margin={"r":0,"t":60,"l":0,"b":0})
 fig.show()
 ```
 
-## Progress
-<hr>
-
-```{python}
-df_countries_casualties = pd.DataFrame(df_attacks.groupby(["Country"])["Casualties"].sum().reset_index())
-df_countries_terrorist_count = pd.DataFrame(df_attacks.groupby(["Country"])["Event ID"].count().reset_index())
-df_countries_terrorist_count.rename(columns={"Event ID": "Number of Terrorist Attacks"}, inplace=True)
-df_merged_casualties_count = df_countries_casualties.merge(df_countries_terrorist_count[["Country", "Number of Terrorist Attacks"]])
-fig = px.scatter(df_merged_casualties_count, x="Number of Terrorist Attacks", y="Casualties", title="Country-specific Attacks and Casualties", hover_data=["Country"])
-fig.update_layout(title_x=0.50)
-fig.show()
-```
-
-## Progress
+## Progress {background-image="./background.jpg"}
 <hr>
 
 ```{python}
@@ -363,7 +403,7 @@ fig.update_layout(height=600, margin={"r":0,"t":60,"l":0,"b":0})
 fig.show()
 ```
 
-## Setbacks
+## Setbacks {background-image="./background.jpg"}
 <hr>
 - Reading Files
 - Git Large File Storage
@@ -371,14 +411,14 @@ fig.show()
 - Standardizing Data
 
 
-## Future Work
+## Future Work {background-image="./background.jpg"}
 <hr>
 - Finalizing word cloud for motives of terrorst attacks
 - Analyzing terrorism's effect on socio-economic factors
 - Modeling to predict the number of casualties
 - Visualization for ranking of terrorist groups
 
-## 
-<h1 style="position: absolute; top: 50%; transform: translate(0, -50%); padding: 10px; left: 30%;">
+## {background-image="./background.jpg"}
+<h1 style="position: absolute; top: 50%; transform: translate(0, -50%); padding: 10px; left: 27%;">
 Feedbacks?
 <h2>

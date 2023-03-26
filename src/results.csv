@@ -1,0 +1,8 @@
+,Model,Root Mean Squared Error,Time (in seconds)
+0,Feed Forward NN,8.68,81.79
+3,Bi-LSTM,8.7,1662.26
+1,CNN,8.77,88.31
+2,GRU,8.77,241.59
+4,Random Forest,9.0,66.46
+5,K Neighbors,9.83,13.77
+6,Decision Trees,12.82,0.99

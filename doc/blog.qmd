@@ -6,7 +6,8 @@ bibliography: references.bib
 number-sections: false
 format:
   html:
-    theme: cosmo
+    theme: 
+      - cosmo
     rendering: embed-resources
     code-fold: true
     code-tools: true
@@ -16,7 +17,9 @@ jupyter: python3
 
 Terrorism has been a constant hindrance on mankind's journey to achieve global peace and prosperity. From hostage situations and hijackings to mass shootings and bombings, terrorist attacks have a profound impact on both the victims and the larger society; they cause physical harm and loss of life, as well as emotional trauma and psychological distress. Needless to say, they can have long-lasting socio-economic consequences, disrupting trade and commerce, causing job losses, and decreasing investor confidence.
 
-As the frequency of terrorist attacks are increasing at a rate faster than ever, it is crucial to understand them and their trends and patterns. In this blog post, I will be examining various aspects of terrorism including regions, targets, methods and motives using three open-source datasets: Global Terrorism Database, which contains information on over 180,000 global terrorist attacks from 1970 to 2017; World GDP dataset, which includes the GDP per Capita of different countries from 1960 to 2021; and the World Population dataset, which provides the data on fertility rate and net migration of each countries from 1955 to 2020. I hope this will shed some light on this phenomenon of global terrorism and will equip us better to combat them in the future. So lets roll up our sleeves and demystify the data from the world of global terrorism.
+As the frequency of terrorist attacks is increasing at a rate faster than ever, it is crucial to understand them and their trends and patterns. In this blog post, I will be examining various aspects of terrorism including regions, targets, methods, and motives using three open-source datasets: [Global Terrorism Database (GTD)](https://www.kaggle.com/datasets/START-UMD/gtd), which contains information on over 180,000 global terrorist attacks from 1970 to 2017; [World, Region, Country GDP/GDP per capita](https://www.kaggle.com/datasets/tmishinev/world-country-gdp-19602021), which includes the GDP per Capita of different countries from 1960 to 2021; and the [World Bank National Accounts data](https://data.worldbank.org/indicator/NY.GDP.MKTP.CD), which provides the data on the fertility rate and net migration of each country from 1955 to 2020. 
+
+I hope this project will shed some light on the phenomenon of global terrorism and will equip us better to combat them in the future. So let's roll up our sleeves and demystify the data from the world of global terrorism.
 
 ```{python echo=FALSE}
 #| label: fig-import
@@ -46,6 +49,7 @@ from matplotlib.lines import Line2D
 import matplotlib.patches as mpatches
 import time
 import warnings
+import bar_chart_race as bcr
 warnings.filterwarnings("ignore", category=FutureWarning)
 
 df_attacks = pd.read_csv("../data/globalterrorismdb_0718dist.csv", encoding="ISO-8859-1", low_memory=False)
@@ -77,8 +81,10 @@ fig.update_layout(title_x=0.44)
 fig.show()
 ```
 
-
-
+The animation in @fig-import shows that there were a significant number of terrorist attacks in 
+the US from 1970 to 2017. It is surprising to see this, especially when we consider the effort the US has put
+over the past 50 years in tackling terrorism in almost every terrorist-prone country. So before anything else, let's analyze
+the states in the US that have the highest number of such incidents.
 
 ```{python}
 #| label: fig-us
@@ -181,18 +187,20 @@ fig.update_layout(height=500, width=780)
 fig.show()
 ```
 
+@fig-us shows different states in the US with a varying number of terrorist attacks, which has been calculated by dividing the 
+total number of terrorist attacks in a given state by its population and standardizing such the state with the highest score
+is assigned a value of 1 and the least score is assigned a value of 0. We see that New York, Oregon, California, Washington,
+and Nebraska are the five most terrorist-prone states in the US and Kentucky, South Carolina, West Virginia, Alaska, and Arkansas
+were the safest states in terms of the frequency of terrorist attacks. 
 
-
-
-
-
+It might be interesting to see the motives behind the terrorist attacks in the US. So, let's explore them, and to be more specific, let's compare the motives of the terrorist attacks from 1970-1999 and 2000-2017. 
 
 ```{python}
 #| label: fig-motives
 #| layout-ncol: 2
-#| fig-cap: "Attack Motives"
+#| fig-cap: "Attack Motives in the US"
 #| fig-subcap: 
-#|   - "1970-2000"
+#|   - "1970-1999"
 #|   - "2000-2017"
 stpwrd = nltk.corpus.stopwords.words('english')
 extended_list = ["specific",  "motive", "unknown", "Unknown", "incident", "claimed", "responsibility", "however", "unaffiliated", "individual", "identified", "killed", "stated", "anti", "attacks", "protest", "carried", "attack", "trend", "larger", "may", "part", "following", "community", "sources", "violence", "targeting", "noted", "posited", "suspected", "targeting", "members", "noted", "targeted", "also", "assailant", "perpetrator", "meant", "bring attention", "practice", "perpetrator", "assailant", "meant", "bring", "attention"]
@@ -217,7 +225,7 @@ plt.figure(figsize = (12, 12), facecolor = None)
 plt.imshow(wordcloud) 
 plt.axis("off")
 plt.tight_layout(pad = 2)
-plt.title("Attack Motives (" + str(1970) + " - " + str(2000) + ")", fontdict={'fontsize': 36})
+plt.title("Attack Motives (" + str(1970) + " - " + str(1999) + ")", fontdict={'fontsize': 36})
 plt.show()
 
 stpwrd = nltk.corpus.stopwords.words('english')
@@ -231,8 +239,6 @@ df_attacks_us = df_attacks_us.dropna()
 temp_df = df_attacks_us[(df_attacks_us["Year"] >= 2000) & (df_attacks_us["Year"] <= (2017))]
 motive = list(temp_df["Motive"].values)
 motive = " ".join(motive)
-from wordcloud import WordCloud
-import matplotlib.pyplot as plt
 
 wordcloud = WordCloud(width=1000, height=800,
                 background_color ='white', 
@@ -247,7 +253,9 @@ plt.title("Attack Motives (" + str(2000) + " - " + str(2017) + ")", fontdict={'f
 plt.show()
 ```
 
+Both the word clouds share a common theme of abortion, suggesting that this has been a prominent topic of discussion and conflict for several decades. However, the word-clouds also differ in significant ways. The first word-cloud, which pertains to the pre-2000 period, reveals issues that were relevant to Puerto Rico, Vietnam, and African American groups. The second word-cloud, which represents the post-2000 period, shows themes that are related to Iraq, ISIL, and Islamic states. These topics suggest that there has been an increase in religiously motivated attacks over the past 20 years. This shift in topics also reflects changes in the political landscape both domestically and internationally from fighting against the spread of communism and racism to religiously motivated terrorism.
 
+Now, let's analyze how the frequency of terrorist attacks has changed over the last 50 years. 
 
 ```{python}
 #| label: fig-frequency
@@ -264,6 +272,10 @@ fig.update_layout({
 fig.show()
 ```
 
+It is apparent from @fig-frequency that the number of terrorist attacks was at its minimum around the years 
+1972 and 2003 (it is worth mentioning that the data for 1994 was missing and not 0) and has greatly increased over the last decade. 
+
+But, what parts of the world have experienced the highest number of terrorist attacks? 
 
 ```{python}
 #| label: fig-regions
@@ -282,6 +294,9 @@ fig.update_layout({
 fig.show()
 ```
 
+@fig-regions shows that the Middle East & North Africa, South Asia, and South America were the three most terrorist-prone regions. On the other hand, Australasia & Oceania, Central Asia, and East Asia were the safest regions in terms of terrorism. It is also worth noting that in all the geographical regions, the terrorist groups used bombing and armed assault as the most common form of attacks.
+
+Let's delve deeper to see which countries from these terrorist-prone regions were contributing the highest number of terrorist incidents.
 
 
 ```{python}
@@ -307,6 +322,33 @@ fig.update_layout(height=500, width=880)
 fig.show()
 ```
 
+In @fig-countries, we see that Iraq in the Middle East; Afghanistan, Pakistan, and India in South Asia, and Colombia in South America were the most terrorist-prone countries. 
+
+The analysis of global terrorism is incomplete without information on terrorist groups. So, let's see the top 15 most notorious terrorist groups based on the number of casualties from the attacks they have orchestrated.
+
+```{python}
+#| label: fig-groups
+#| fig-cap: "Attacks by Different Terrorist Groups"
+groupwise_casualty_freq = pd.DataFrame(df_attacks.groupby("Terrorist Group")["Casualties"].sum()).reset_index()
+groupwise_casualty_freq = groupwise_casualty_freq.sort_values(by="Casualties", ascending=False)[:16]
+notorious_groups = list(groupwise_casualty_freq["Terrorist Group"])
+notorious_groups.remove("Unknown")
+df_notorious_groups = df_attacks[df_attacks["Terrorist Group"].isin(notorious_groups)]
+df_notorious_groups = pd.DataFrame(df_notorious_groups.groupby(["Terrorist Group", "Year"])["Casualties"].sum().reset_index())
+df_notorious_groups["Terrorist Group"] = df_notorious_groups["Terrorist Group"].replace(["Farabundo Marti National Liberation Front (FMLN)", "Islamic State of Iraq and the Levant (ISIL)", "Kurdistan Workers' Party (PKK)", "Liberation Tigers of Tamil Eelam (LTTE)", "New People's Army (NPA)", "Nicaraguan Democratic Force (FDN)", "Revolutionary Armed Forces of Colombia (FARC)", "Shining Path (SL)", "Tehrik-i-Taliban Pakistan (TTP)"], ["Farbundo Liberation", "ISIL", "Kurdistan W.", "Tamil Tigers", "New People's Army", "Nicaraguan Force", "Colombian Force", "Shining Path", "Taliban Pakistan"])
+fig = px.line(df_notorious_groups, x="Year", y="Casualties", color="Terrorist Group", title='Attacks by different Terrorist Groups')
+fig.update_layout(title_x=0.5)
+fig.update_layout(height=500)
+fig.update_layout({
+    'plot_bgcolor': 'rgba(0,0,0,0)',
+    'paper_bgcolor': 'rgba(0,0,0,0)'
+})
+fig.show()
+```
+
+One cannot fail to notice the peak in 2001 for Al Qaida, which is widely taken as the beginning of the rise of other Islamic religious extremist terrorist groups like Taliban, Al-Shabaab, and Boko Haram. Taliban, Boko Haram, and ISIL, as evident from the steep lines after 2010 in @fig-groups, appear to have killed more people than all the other 12 terrorist groups combined in the last 50 years.
+
+So what exactly do these terrorist groups target? Let's explore:
 ```{python}
 #| label: fig-targets
 #| fig-cap: "Common Targets of Terrorist attacks"
@@ -326,27 +368,9 @@ fig.update_layout({
 fig.show()
 ```
 
+Most of the attacks have been targeted toward private citizens & property, the military, and the police. Private citizens & properties are generally the easiest groups to be attacked and help get terrorist groups to gain an undeserved attention. This might be one possible explanation for such a high number of attacks on them. 
 
-
-```{python}
-#| label: fig-groups
-#| fig-cap: "Attacks by different Terrorist Groups"
-groupwise_casualty_freq = pd.DataFrame(df_attacks.groupby("Terrorist Group")["Casualties"].sum()).reset_index()
-groupwise_casualty_freq = groupwise_casualty_freq.sort_values(by="Casualties", ascending=False)[:16]
-notorious_groups = list(groupwise_casualty_freq["Terrorist Group"])
-df_notorious_groups = df_attacks[df_attacks["Terrorist Group"].isin(notorious_groups)]
-df_notorious_groups = pd.DataFrame(df_notorious_groups.groupby(["Terrorist Group", "Year"])["Casualties"].sum().reset_index())
-df_notorious_groups["Terrorist Group"] = df_notorious_groups["Terrorist Group"].replace(["Farabundo Marti National Liberation Front (FMLN)", "Islamic State of Iraq and the Levant (ISIL)", "Kurdistan Workers' Party (PKK)", "Liberation Tigers of Tamil Eelam (LTTE)", "New People's Army (NPA)", "Nicaraguan Democratic Force (FDN)", "Revolutionary Armed Forces of Colombia (FARC)", "Shining Path (SL)", "Tehrik-i-Taliban Pakistan (TTP)"], ["Farbundo Liberation", "ISIL", "Kurdistan W.", "Tamil Tigers", "New People's Army", "Nicaraguan Force", "Colombian Force", "Shining Path", "Taliban Pakistan"])
-fig = px.line(df_notorious_groups, x="Year", y="Casualties", color="Terrorist Group", title='Attacks by different Terrorist Groups')
-fig.update_layout(title_x=0.5)
-fig.update_layout(height=500)
-fig.update_layout({
-    'plot_bgcolor': 'rgba(0,0,0,0)',
-    'paper_bgcolor': 'rgba(0,0,0,0)'
-})
-fig.show()
-```
-
+Not to be forgotten, let's analyze the relationship between terrorism and socio-economic factors like GDP and fertility rate.
 
 ```{python}
 #| label: fig-socioeconomic
@@ -415,6 +439,7 @@ fig.update_layout(height=400, width=800)
 fig.show()
 ```
 
+@fig-socioeconomic shows the GDP and fertility rate of the aforementioned five-most terrorist-prone countries. All these countries had a lower GDP and higher fertility rate compared to the global average in the given period. India is an exception to have its GDP increase at a faster rate than the global average. Similarly, Colombia is an exception to have its fertility rate below the global average from the 1980s.
 
 ```{python}
 #| eval: false
@@ -513,6 +538,9 @@ result_df = pd.DataFrame(result, columns=["Model", "Root Mean Squared Error", "T
 result_df.to_csv("./results.csv")  
 ```
 
+Finally, let's take the machine and deep learning algorithms out of our arsenals and tackle the problem of predicting the number of casualties for any given attack based on the date, country, region, state, city, suicidal intent, type, target type, terrorist group, and weapon used in the attack. We believe such a model will be useful for intelligence groups to assess the severity of attacks and prepare for them in the future.
+
+The dataset was split into train, validation, and test sets in the ratio 70:15:15. The train and validation sets were used during the training phase and the test set was for testing the efficiency of the model based on the time it take and its root-mean-squared(RMS) error. The results are shown in @fig-results.
 
 ```{python}
 #| label: fig-results
@@ -542,17 +570,79 @@ sns.lineplot(data = list(result_df["Time (in seconds)"]), marker='o', ax=ax2, co
 plt.show()
 ```
 
+Feed Forward Neural Network turned out to be the most effective model, achieving an RMS error of 8.68, and Decision Trees was the fastest model, completing prediction in 0.99 seconds. In general, neural networks had lower RMS error than other machine learning models but they were also slower to train and test than their machine learning counterparts. 
 
-**Welcome** 
-## Quarto is cool
+Our analysis ends here for now but in the future, the models will be tuned for their hyperparameters and trained on a larger dataset, combining and feature engineering different socio-economic factors to achieve the lowest possible RMSE score. 
 
-This section was copy/pasted from various parts of the [Quarto website](https://quarto.org/docs/get-started/hello/vscode.html).
+## More Animations
+```{python}
+#| eval: false
+df_countries_pivot = pd.DataFrame(df_attacks.groupby(["Country", "Year"]).count()).reset_index()
+df_countries_pivot.rename(columns={"Event ID": "Number of Terrorist Attacks"}, inplace=True)
+df_countries_pivot = df_countries_pivot.pivot_table(values = 'Number of Terrorist Attacks',index = ['Year'], columns = 'Country')
+df_countries_pivot.fillna(0, inplace=True)
+df_countries_pivot.sort_values(list(df_countries_pivot.columns),inplace=True)
+df_countries_pivot = df_countries_pivot.sort_index()
+df_countries_pivot.iloc[:, 0:-1] = df_countries_pivot.iloc[:, 0:-1].cumsum()
+bcr.bar_chart_race(df = df_countries_pivot,
+                   n_bars = 10,
+                   period_length=1000,
+                   sort='desc',
+                   title="Countries with the Highest Number of Terrorist Attacks",
+                   filter_column_colors=True,
+                   filename = None)
 
+df_region_pivot = pd.DataFrame(df_attacks.groupby(["Region", "Year"]).count()).reset_index()
+df_region_pivot.rename(columns={"Event ID": "Number of Terrorist Attacks"}, inplace=True)
+df_region_pivot = df_region_pivot.pivot_table(values = 'Number of Terrorist Attacks',index = ['Year'], columns = 'Region')
+df_region_pivot.fillna(0, inplace=True)
+df_region_pivot.sort_values(list(df_region_pivot.columns),inplace=True)
+df_region_pivot = df_region_pivot.sort_index()
+df_region_pivot.iloc[:, 0:-1] = df_region_pivot.iloc[:, 0:-1].cumsum()
+bcr.bar_chart_race(df = df_region_pivot, 
+                   n_bars = 12,
+                   period_length=1000,
+                   sort='desc',
+                   title="Terrorist Attacks Based on Geographical Regions",
+                   filter_column_colors=True,
+                   filename = None)
 
-For a demonstration of a line plot on a polar axis, see @fig-polar.
+df_region_pivot = pd.DataFrame(df_attacks.groupby(["Region", "Year"]).count()).reset_index()
+df_region_pivot.rename(columns={"Event ID": "Number of Terrorist Attacks"}, inplace=True)
+df_region_pivot = df_region_pivot.pivot_table(values = 'Number of Terrorist Attacks',index = ['Year'], columns = 'Region')
+df_region_pivot.fillna(0, inplace=True)
+df_region_pivot.sort_values(list(df_region_pivot.columns),inplace=True)
+df_region_pivot = df_region_pivot.sort_index()
+df_region_pivot.iloc[:, 0:-1] = df_region_pivot.iloc[:, 0:-1].cumsum()
+bcr.bar_chart_race(df = df_region_pivot, 
+                   n_bars = 10,
+                   period_length=750,
+                   sort='desc',
+                   title="Terrorist Attacks based on Geographical Region",
+                   filter_column_colors=True,
+                   filename = None)
+```
+<iframe data-external="1" src="https://www.youtube.com/embed/qmtzgzcPTbk"></iframe>
+<iframe data-external="1" src="https://www.youtube.com/embed/Fs7OdDxY3sg"></iframe>
+<iframe data-external="1" src="https://www.youtube.com/embed/jvOC-eA_Hzo"></iframe>
 
+## References
+| Countries in the world by population (2023). Worldometer. Retrieved February 5, 
+|     2023, from https://www.worldometers.info/world-population/population-by-country/
 
-Here's an example of citing a source [see @phil99, pp. 33-35]. Be sure the source information is entered in "BibTeX" form in the `references.bib` file.
+| Information on more than 200,000 terrorist attacks. Global Terrorism Database. 
+|    Retrieved February 5, 2023, from https://www.start.umd.edu/gtd/ 
 
+| Lai, N. T. C. (2023, February 3). Word population (1955-2020). Kaggle. Retrieved February 
+|    5, 2023, from https://www.kaggle.com/datasets/nguyenthicamlai/population-2022 
 
-The bibliography will automatically get generated. Any sources you cite in the document will be included. Other entries in the `.bib` file will not be included.
+| Mishinev, T. (2022, September 9). World, region, country GDP/GDP per capita. Kaggle. 
+|    Retrieved February 5, 2023, from 
+|    https://www.kaggle.com/datasets/tmishinev/world-country-gdp-19602021 
+
+| National Consortium for the Study of Terrorism and Responses to Terrorism. Global 
+|    terrorism database. Kaggle. Retrieved February 5, 2023, from 
+|    https://www.kaggle.com/datasets/START-UMD/gtd 
+
+| World Bank. GDP (current US$). GDP National Accounts. Retrieved February 5, 2023, from 
+|    https://data.worldbank.org/indicator/NY.GDP.MKTP.CD 

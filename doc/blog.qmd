@@ -15,9 +15,9 @@ format:
 jupyter: python3
 ---
 
-Terrorism has been a constant hindrance on mankind's journey to achieve global peace and prosperity. From hostage situations and hijackings to mass shootings and bombings, terrorist attacks have a profound impact on both the victims and the larger society; they cause physical harm and loss of life, as well as emotional trauma and psychological distress. Needless to say, they can have long-lasting socio-economic consequences, disrupting trade and commerce, causing job losses, and decreasing investor confidence.
+Terrorism has been a constant hindrance on mankind's effort to achieve global peace and prosperity. From hostage situations and hijackings to mass shootings and bombings, terrorist attacks have a profound impact on both the victims and the larger society; they cause physical harm and loss of life, as well as emotional trauma and psychological distress. Needless to say, they can have long-lasting socio-economic consequences, disrupting trade and commerce, causing job losses, and decreasing investor confidence.
 
-As the frequency of terrorist attacks is increasing at a rate faster than ever, it is crucial to understand them and their trends and patterns. In this blog post, I will be examining various aspects of terrorism including regions, targets, methods, and motives using three open-source datasets: [Global Terrorism Database (GTD)](https://www.kaggle.com/datasets/START-UMD/gtd), which contains information on over 180,000 global terrorist attacks from 1970 to 2017; [World, Region, Country GDP/GDP per capita](https://www.kaggle.com/datasets/tmishinev/world-country-gdp-19602021), which includes the GDP per Capita of different countries from 1960 to 2021; and the [World Bank National Accounts data](https://data.worldbank.org/indicator/NY.GDP.MKTP.CD), which provides the data on the fertility rate and net migration of each country from 1955 to 2020. 
+As the frequency of terrorist attacks is increasing at a rate faster than ever, it is crucial to understand them and their trends and patterns. In this blog post, I will be examining various aspects of terrorism including regions, targets, methods, and motives using three open-source datasets: [Global Terrorism Database (GTD)](https://www.kaggle.com/datasets/START-UMD/gtd), which contains information on over 180,000 global terrorist attacks from 1970 to 2017; [World, Region, Country GDP/GDP per capita](https://www.kaggle.com/datasets/tmishinev/world-country-gdp-19602021), which includes the GDP per Capita of different countries from 1960 to 2021; and the [World Bank National Accounts data](https://data.worldbank.org/indicator/NY.GDP.MKTP.CD), which provides the information on the fertility rate and net migration of each country from 1955 to 2020. 
 
 I hope this project will shed some light on the phenomenon of global terrorism and will equip us better to combat them in the future. So let's roll up our sleeves and demystify the data from the world of global terrorism.
 
@@ -188,10 +188,10 @@ fig.show()
 ```
 
 @fig-us shows different states in the US with a varying number of terrorist attacks, which has been calculated by dividing the 
-total number of terrorist attacks in a given state by its population and standardizing such the state with the highest score
+total number of terrorist attacks in a given state by its population and standardizing in such a way the state with the highest score
 is assigned a value of 1 and the least score is assigned a value of 0. We see that New York, Oregon, California, Washington,
 and Nebraska are the five most terrorist-prone states in the US and Kentucky, South Carolina, West Virginia, Alaska, and Arkansas
-were the safest states in terms of the frequency of terrorist attacks. 
+are the safest states in terms of the frequency of terrorist attacks. 
 
 It might be interesting to see the motives behind the terrorist attacks in the US. So, let's explore them, and to be more specific, let's compare the motives of the terrorist attacks from 1970-1999 and 2000-2017. 
 
@@ -348,7 +348,7 @@ fig.show()
 
 One cannot fail to notice the peak in 2001 for Al Qaida, which is widely taken as the beginning of the rise of other Islamic religious extremist terrorist groups like Taliban, Al-Shabaab, and Boko Haram. Taliban, Boko Haram, and ISIL, as evident from the steep lines after 2010 in @fig-groups, appear to have killed more people than all the other 12 terrorist groups combined in the last 50 years.
 
-So what exactly do these terrorist groups target? Let's explore:
+So what exactly do these terrorist groups target? Let's find out.
 ```{python}
 #| label: fig-targets
 #| fig-cap: "Common Targets of Terrorist attacks"
@@ -368,9 +368,9 @@ fig.update_layout({
 fig.show()
 ```
 
-Most of the attacks have been targeted toward private citizens & property, the military, and the police. Private citizens & properties are generally the easiest groups to be attacked and help get terrorist groups to gain an undeserved attention. This might be one possible explanation for such a high number of attacks on them. 
+Most of the attacks have been targeted toward private citizens & property, the military, and the police. Private citizens & properties are generally the easiest groups to be attacked. This might be one possible explanation for such a high number of attacks on them. 
 
-Not to be forgotten, let's analyze the relationship between terrorism and socio-economic factors like GDP and fertility rate.
+Now, let's analyze the relationship between terrorism and socio-economic factors like GDP and fertility rate.
 
 ```{python}
 #| label: fig-socioeconomic
@@ -439,7 +439,7 @@ fig.update_layout(height=400, width=800)
 fig.show()
 ```
 
-@fig-socioeconomic shows the GDP and fertility rate of the aforementioned five-most terrorist-prone countries. All these countries had a lower GDP and higher fertility rate compared to the global average in the given period. India is an exception to have its GDP increase at a faster rate than the global average. Similarly, Colombia is an exception to have its fertility rate below the global average from the 1980s.
+@fig-socioeconomic shows the GDP and fertility rate of the aforementioned five-most terrorist-prone countries. All these countries had a lower GDP and higher fertility rate compared to the global average in the given period. India is an exception to have its GDP increase at a faster rate than the global average. Similarly, Colombia is an exception to have its fertility rate below the global average right from the 1980s.
 
 ```{python}
 #| eval: false

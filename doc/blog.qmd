@@ -153,6 +153,7 @@ us_state_to_abbrev = {
     "United States Minor Outlying Islands": "UM",
     "U.S. Virgin Islands": "VI",
 }
+
 df_attacks_us = df_attacks[df_attacks["Country"] == "United States"] 
 df_attacks_us = pd.DataFrame(df_attacks_us.groupby("Province/State")["Event ID"].count())
 df_attacks_us = df_attacks_us.reset_index()

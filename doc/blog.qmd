@@ -19,8 +19,9 @@ Terrorism has been a constant hindrance on our effort to achieve global peace an
 
 As the frequency of terrorist attacks is increasing at a rate faster than ever, it is crucial to understand them and their trends and patterns. In this blog post, I will be examining various aspects of terrorism including regions, targets, methods, and motives using three open-source datasets: [Global Terrorism Database (GTD)](https://www.kaggle.com/datasets/START-UMD/gtd), which contains information on over 180,000 global terrorist attacks from 1970 to 2017; [World, Region, Country GDP/GDP per capita](https://www.kaggle.com/datasets/tmishinev/world-country-gdp-19602021), which includes the GDP per Capita of different countries from 1960 to 2021; and the [World Bank National Accounts data](https://data.worldbank.org/indicator/NY.GDP.MKTP.CD), which provides the information on the fertility rate and net migration of each country from 1955 to 2020. 
 
-## Analysis 
 I hope this project will shed some light on the phenomenon of global terrorism and will equip us better to combat them in the future. So let's roll up our sleeves and demystify the world of global terrorism.
+
+## Analysis 
 
 ```{python echo=FALSE}
 #| label: fig-import

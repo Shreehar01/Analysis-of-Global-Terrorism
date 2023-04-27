@@ -1,2 +1,2 @@
-# capstone
-Template for capstone project.
+# Data Science Senior Project
+

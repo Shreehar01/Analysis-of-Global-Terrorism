@@ -15,15 +15,18 @@ format:
 jupyter: python3
 ---
 
-Terrorism has been a constant hindrance on mankind's effort to achieve global peace and prosperity. From hostage situations and hijackings to mass shootings and bombings, terrorist attacks have a profound impact on both the victims and the larger society; they cause physical harm and loss of life, as well as emotional trauma and psychological distress. Needless to say, they can have long-lasting socio-economic consequences, disrupting trade and commerce, causing job losses, and decreasing investor confidence.
+Terrorism has been a constant hindrance on our effort to achieve global peace and prosperity. From hostage situations and hijackings to mass shootings and bombings, terrorist attacks have a profound impact on both the victims and the larger society; they cause physical harm and loss of life, as well as emotional trauma and psychological distress. Needless to say, they can have long-lasting socio-economic consequences, disrupting trade and commerce, causing job losses, and decreasing investor confidence.
 
 As the frequency of terrorist attacks is increasing at a rate faster than ever, it is crucial to understand them and their trends and patterns. In this blog post, I will be examining various aspects of terrorism including regions, targets, methods, and motives using three open-source datasets: [Global Terrorism Database (GTD)](https://www.kaggle.com/datasets/START-UMD/gtd), which contains information on over 180,000 global terrorist attacks from 1970 to 2017; [World, Region, Country GDP/GDP per capita](https://www.kaggle.com/datasets/tmishinev/world-country-gdp-19602021), which includes the GDP per Capita of different countries from 1960 to 2021; and the [World Bank National Accounts data](https://data.worldbank.org/indicator/NY.GDP.MKTP.CD), which provides the information on the fertility rate and net migration of each country from 1955 to 2020. 
 
-I hope this project will shed some light on the phenomenon of global terrorism and will equip us better to combat them in the future. So let's roll up our sleeves and demystify the data from the world of global terrorism.
+## Analysis 
+I hope this project will shed some light on the phenomenon of global terrorism and will equip us better to combat them in the future. So let's roll up our sleeves and demystify the world of global terrorism.
 
 ```{python echo=FALSE}
 #| label: fig-import
 #| fig-cap: "Global Terrorist Attacks"
+
+# Import modules
 import pandas as pd
 import numpy as np
 import plotly.express as px
@@ -52,6 +55,7 @@ import warnings
 import bar_chart_race as bcr
 warnings.filterwarnings("ignore", category=FutureWarning)
 
+# Read first database
 df_attacks = pd.read_csv("../data/globalterrorismdb_0718dist.csv", encoding="ISO-8859-1", low_memory=False)
 df_attacks.head()
 df_attacks = df_attacks[['eventid','iyear', 'imonth', 'iday', 'country_txt', 'region_txt', 
@@ -63,18 +67,22 @@ df_attacks.rename(columns={"eventid": "Event ID", "iyear": "Year", "imonth": "Mo
 "targtype1_txt": "Target Type", "gname": "Terrorist Group", "motive": "Motive", 
 "weaptype1_txt": "Weapon Type", "nkill": "Casualties"}, inplace=True)
 
+# Read second database
 df_population = pd.read_csv("../data/population.csv")
 df_population = df_population[["Country","Year", "Migrants(net)", "FertilityRate"]]
 df_population.rename(columns= {"FertilityRate": "Fertility Rate", "Migrants(net)": "Migrants (net)"}, inplace=True)
 
+# Read third database
 df_gdp = pd.read_csv("../data/world_country_gdp_usd.csv")
 df_gdp = df_gdp[['Country Name','year', 'GDP_USD']]
 df_gdp.rename(columns= {"Country Name": "Country", "year": "Year", "GDP_USD":"GDP (in USD)", "GDP_per_capita_USD": "GDP (per capita)"}, inplace=True)
 
+# Read database for the population of the US
 df_us_population = pd.read_csv("../data/us_population.csv")
 df_us_population = df_us_population[["state", "pop2022"]]
 df_us_population.rename(columns= {"state": "State", "pop2022": "Population"}, inplace=True) 
 
+# Show the terrorist attacks as a scatter animation
 fig = px.scatter_geo(df_attacks, lon="Longitude", lat="Latitude", animation_frame="Year", color="Region",
                      projection="equirectangular", animation_group="Year", title="Terrorist Attacks (1970 - 2017)")
 fig.update_layout(title_x=0.44)
@@ -89,11 +97,8 @@ the states in the US that have the highest number of such incidents.
 ```{python}
 #| label: fig-us
 #| fig-cap: "Terrorist Attacks in the US"
-us_states = np.asarray(['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA',
-                        'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA',
-                        'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY',
-                        'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX',
-                        'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'])
+
+# Map US states to their abbreviations
 us_state_to_abbrev = {
     "Alabama": "AL",
     "Alaska": "AK",
@@ -154,12 +159,15 @@ us_state_to_abbrev = {
     "U.S. Virgin Islands": "VI",
 }
 
+# Filter all the attacks in the US alone
 df_attacks_us = df_attacks[df_attacks["Country"] == "United States"] 
 df_attacks_us = pd.DataFrame(df_attacks_us.groupby("Province/State")["Event ID"].count())
 df_attacks_us = df_attacks_us.reset_index()
 df_attacks_us.rename(columns={"Province/State": "State", "Event ID": "Number of Terrorist Attacks"}, inplace=True)
 df_attacks_us = df_attacks_us[df_attacks_us["State"] != "Unknown"]
 df_attacks_us["State Code"] = df_attacks_us["State"].apply(lambda x: us_state_to_abbrev[x])
+
+# Standardize the terrorism score between 0 and 1
 def scale_column(df, column, minVal=float('-inf'), maxVal=float('inf')):
     if minVal == float('-inf'):
         minVal = min(df[column])
@@ -170,12 +178,14 @@ def scale_column(df, column, minVal=float('-inf'), maxVal=float('inf')):
         res.append((val - minVal) / (maxVal - minVal))
     return res
 
-df_us_population.head()
+# Count the number of terrorist attacks in each US state and standardize the number based on population
 df_attacks_us = df_attacks_us.merge(df_us_population[['State', 'Population']])
 df_attacks_us["Number of Terrorist Attacks (Standardised)"] = df_attacks_us["Number of Terrorist Attacks"] / df_attacks_us["Population"]
 tempVal = scale_column(df_attacks_us, "Number of Terrorist Attacks (Standardised)")
 df_attacks_us["Number of Terrorist Attacks (Standardised)"] = tempVal
 df_attacks_us = df_attacks_us.sort_values(by="Number of Terrorist Attacks (Standardised)", ascending=False)
+
+# Plot the choropleth for terrorist attacks in the US states
 fig = px.choropleth(df_attacks_us, locations='State Code', color='Number of Terrorist Attacks (Standardised)',
                     color_continuous_scale="Viridis",
                     locationmode="USA-states", 
@@ -203,20 +213,24 @@ It might be interesting to see the motives behind the terrorist attacks in the U
 #| fig-subcap: 
 #|   - "1970-1999"
 #|   - "2000-2017"
+
+# Create two word clouds showing the motives of the terrorist attacks.
+# First, download the stopwords and add common words from the motives column
 stpwrd = nltk.corpus.stopwords.words('english')
 extended_list = ["specific",  "motive", "unknown", "Unknown", "incident", "claimed", "responsibility", "however", "unaffiliated", "individual", "identified", "killed", "stated", "anti", "attacks", "protest", "carried", "attack", "trend", "larger", "may", "part", "following", "community", "sources", "violence", "targeting", "noted", "posited", "suspected", "targeting", "members", "noted", "targeted", "also", "assailant", "perpetrator", "meant", "bring attention", "practice", "perpetrator", "assailant", "meant", "bring", "attention"]
-
 stpwrd.extend(extended_list)
 
-
+# Select all the attacks in the US
 df_attacks_us = df_attacks[df_attacks["Country"] == "United States"]
 df_attacks_us = df_attacks_us[["Year", "Motive"]]
 df_attacks_us = df_attacks_us.dropna()
 
+# Select the subset of the dataset above to only include the years between 1970 and 1999 inclusive.
 temp_df = df_attacks_us[(df_attacks_us["Year"] >= 1970) & (df_attacks_us["Year"] < (2000))]
 motive = list(temp_df["Motive"].values)
 motive = " ".join(motive)
 
+# Plot the word cloud
 wordcloud = WordCloud(width=1000, height=800,
                 background_color ='white',
                 stopwords=stpwrd,
@@ -229,18 +243,13 @@ plt.tight_layout(pad = 2)
 plt.title("Attack Motives (" + str(1970) + " - " + str(1999) + ")", fontdict={'fontsize': 36})
 plt.show()
 
-stpwrd = nltk.corpus.stopwords.words('english')
-stpwrd.extend(extended_list)
 
-
-df_attacks_us = df_attacks[df_attacks["Country"] == "United States"]
-df_attacks_us = df_attacks_us[["Year", "Motive"]]
-df_attacks_us = df_attacks_us.dropna()
-
+# Select the subset of the dataset above to only include the years between 2000 and 2017 inclusive. 
 temp_df = df_attacks_us[(df_attacks_us["Year"] >= 2000) & (df_attacks_us["Year"] <= (2017))]
 motive = list(temp_df["Motive"].values)
 motive = " ".join(motive)
 
+# Plot the word cloud
 wordcloud = WordCloud(width=1000, height=800,
                 background_color ='white', 
                 stopwords=stpwrd,
@@ -261,6 +270,8 @@ Now, let's analyze how the frequency of terrorist attacks has changed over the l
 ```{python}
 #| label: fig-frequency
 #| fig-cap: "Frequency of Terrorist Attacks"
+
+# Count the number of terrorist attacks each year and plot a bar chart.
 yearly_freq = pd.DataFrame(df_attacks.groupby("Year")["Event ID"].count()).reset_index()
 yearly_freq.rename(columns={"Event ID": "Number of Terrorist Attacks"}, inplace=True)
 fig = px.bar(yearly_freq, x=yearly_freq["Year"], y=yearly_freq["Number of Terrorist Attacks"], title="Frequency of Terrorist Attacks (1970-2017)")
@@ -281,10 +292,14 @@ But, what parts of the world have experienced the highest number of terrorist at
 ```{python}
 #| label: fig-regions
 #| fig-cap: "Terrorist Attacks in different Regions"
+
+# Count the number of terrorist attacks in each geographical regions and group them based on target type.
 region_freq = pd.DataFrame(df_attacks.groupby(["Region", "Attack Type"])["Event ID"].count()).reset_index()
 region_freq.rename(columns={"Event ID": "Number of Terrorist Attacks"}, inplace=True)
 region_freq = region_freq.sort_values(by="Number of Terrorist Attacks", ascending=False)
 region_freq['Attack Type'] = region_freq['Attack Type'].replace(['Bombing/Explosion', 'Hostage Taking (Kidnapping)', 'Facility/Infrastructure Attack', 'Hostage Taking (Barricade Incident)'], ['Bombing', 'Hostage', 'Facility Attack', 'Hostage (Barr.)'])
+
+# Plot the bar chart.
 fig = px.bar(region_freq, x=region_freq["Region"], y=region_freq["Number of Terrorist Attacks"], color="Attack Type", height=400, title="Terrorist Attacks in Different Regions", barmode="relative")
 fig.update_layout(title_x=0.5)
 fig.update_layout(height=500)
@@ -303,16 +318,22 @@ Let's delve deeper to see which countries from these terrorist-prone regions wer
 ```{python}
 #| label: fig-countries
 #| fig-cap: "Countries with the Highest Number of Attacks"
+
+# Count the number of casualties in each country.
 df_countries_casualties = pd.DataFrame(df_attacks.groupby(["Country"])["Casualties"].sum().reset_index())
 df_countries_terrorist_count = pd.DataFrame(df_attacks.groupby(["Country"])["Event ID"].count().reset_index())
 df_countries_terrorist_count.rename(columns={"Event ID": "Number of Terrorist Attacks"}, inplace=True)
 df_merged_casualties_count = df_countries_casualties.merge(df_countries_terrorist_count[["Country", "Number of Terrorist Attacks"]])
+
+# Map the country names to their ISO codes
 df_iso_codes = px.data.gapminder()[["country", "iso_alpha"]]
 df_iso_codes.rename(columns={"country": "Country", "iso_alpha": "Country Code"}, inplace=True)
 df_iso_codes.drop_duplicates(inplace=True)
 df_iso_codes = df_iso_codes.reset_index()
 df_iso_codes.drop(["index"], axis=1, inplace=True)
 df_countries_terrorist_count = df_countries_terrorist_count.merge(df_iso_codes[['Country', 'Country Code']])
+
+# Plot a choropleth representing the frequency of attacks in different countries.
 fig = px.choropleth(df_countries_terrorist_count, locations="Country Code",
                     color="Number of Terrorist Attacks",
                     hover_name="Country",
@@ -330,6 +351,8 @@ The analysis of global terrorism is incomplete without information on terrorist 
 ```{python}
 #| label: fig-groups
 #| fig-cap: "Attacks by Different Terrorist Groups"
+
+# Count the number of casulaties for different terrorist groups
 groupwise_casualty_freq = pd.DataFrame(df_attacks.groupby("Terrorist Group")["Casualties"].sum()).reset_index()
 groupwise_casualty_freq = groupwise_casualty_freq.sort_values(by="Casualties", ascending=False)[:16]
 notorious_groups = list(groupwise_casualty_freq["Terrorist Group"])
@@ -337,6 +360,8 @@ notorious_groups.remove("Unknown")
 df_notorious_groups = df_attacks[df_attacks["Terrorist Group"].isin(notorious_groups)]
 df_notorious_groups = pd.DataFrame(df_notorious_groups.groupby(["Terrorist Group", "Year"])["Casualties"].sum().reset_index())
 df_notorious_groups["Terrorist Group"] = df_notorious_groups["Terrorist Group"].replace(["Farabundo Marti National Liberation Front (FMLN)", "Islamic State of Iraq and the Levant (ISIL)", "Kurdistan Workers' Party (PKK)", "Liberation Tigers of Tamil Eelam (LTTE)", "New People's Army (NPA)", "Nicaraguan Democratic Force (FDN)", "Revolutionary Armed Forces of Colombia (FARC)", "Shining Path (SL)", "Tehrik-i-Taliban Pakistan (TTP)"], ["Farbundo Liberation", "ISIL", "Kurdistan W.", "Tamil Tigers", "New People's Army", "Nicaraguan Force", "Colombian Force", "Shining Path", "Taliban Pakistan"])
+
+# Plot a line chart for the 15 terrorist groups with the highest number of casualties
 fig = px.line(df_notorious_groups, x="Year", y="Casualties", color="Terrorist Group", title='Attacks by different Terrorist Groups')
 fig.update_layout(title_x=0.5)
 fig.update_layout(height=500)
@@ -353,12 +378,16 @@ So what exactly do these terrorist groups target? Let's find out.
 ```{python}
 #| label: fig-targets
 #| fig-cap: "Common Targets of Terrorist attacks"
+
+# Select the most common targets of the terrorist groups.
 TOP_N = 11
 target_freq = pd.DataFrame(df_attacks.groupby("Target Type")["Event ID"].count()).reset_index()
 target_freq.rename(columns={"Event ID": "Number of Terrorist Attacks"}, inplace=True)
 rem_freq = target_freq.sort_values(by="Number of Terrorist Attacks", ascending=False)[TOP_N:]
 target_freq = target_freq.sort_values(by="Number of Terrorist Attacks", ascending=False)[:TOP_N]
 target_freq = target_freq[target_freq['Target Type'] != "Unknown"]
+
+# Plot a bar chart.
 fig = px.bar(target_freq, x='Target Type', y='Number of Terrorist Attacks', title="Common Targets of Terrorist Attacks")
 fig.update_layout(title_x=0.5)
 fig.update_layout(height=500)
@@ -381,30 +410,39 @@ Now, let's analyze the relationship between terrorism and socio-economic factors
 #|   - "GDP"
 #|   - "Fertility Rate"
 
+# Maps a country to its geographical region
 def map_region(country):
     region = list(df_attacks[df_attacks["Country"] == country]["Region"])[0]
     return region
 
+# Find the top 5 countries with the highest number of terrorist attacks
 country_freq = pd.DataFrame(df_attacks.groupby("Country")["Event ID"].count()).reset_index()
 country_freq.rename(columns={"Event ID": "Number of Terrorist Attacks"}, inplace=True)
 country_freq = country_freq.sort_values(by="Number of Terrorist Attacks", ascending=False)[:10]
 country_freq["Region"] = country_freq["Country"].apply(map_region)
 top_five_countries = list(country_freq["Country"].values)[:5]
+
+# Count the yearly frequency of terrorist attacks of the top five countries.
 country_freq_year = pd.DataFrame(df_attacks.groupby(["Year", "Country"])["Event ID"].count().reset_index())
 country_freq_year = country_freq_year[country_freq_year["Country"].isin(top_five_countries)]
 country_freq_year.rename(columns={"Event ID": "Number of Terrorist Attacks"}, inplace=True)
 
+# Select only the attacks from the top five countries.
 df_terrorist_gdp = df_gdp[(df_gdp["Country"].isin(top_five_countries)) & ((df_gdp["Year"] >= 1970) & (df_gdp["Year"] <= 2017))]
 df_all_gdp = df_gdp[((df_gdp["Year"] >= 1970) & (df_gdp["Year"] <= 2017))]
 df_all_gdp = df_all_gdp.dropna()
 df_all_gdp = pd.DataFrame(df_all_gdp.groupby("Year").mean().reset_index())
 df_all_gdp.rename(columns={"GDP (in USD)": "World"}, inplace=True)
+
+# Assign a specific color to each of the countries. World will take the black color.
 colorList = list(px.colors.qualitative.T10)
 if colorList[0] != "black":
     colorList.insert(0, "black")
 for country in top_five_countries:
     temp_gdp = df_terrorist_gdp[df_terrorist_gdp["Country"] == country]
     df_all_gdp[country] = list(temp_gdp["GDP (in USD)"])
+
+# Plot a line chart showing the GDP of the top five countries and the world.
 fig = px.line(df_all_gdp, x='Year', y=df_all_gdp.columns[1:], title="GDP of Terrorist-prone Countries", color_discrete_sequence=colorList, labels={
                      "value": "GDP (in USD)",
                      "variable": ""
@@ -417,7 +455,7 @@ fig.update_layout(title_x=0.5)
 fig.update_layout(height=400, width=800)
 fig.show()
 
-
+# Select the fertility rate of the top five countries. 
 df_all_fertility = df_population[(df_population["Year"] >= 1970) & (df_population["Year"] <= 2017)]
 df_terrorist_fertility = df_population[(df_population["Country"].isin(top_five_countries)) & ((df_population["Year"] >= 1970) & (df_population["Year"] <= 2017))]
 df_all_fertility = df_all_fertility.dropna()
@@ -427,6 +465,8 @@ df_all_fertility.rename(columns={"Fertility Rate": "World"}, inplace=True)
 for country in top_five_countries:
     temp_fertility = df_terrorist_fertility[df_terrorist_fertility["Country"] == country]
     df_all_fertility[country] = list(temp_fertility["Fertility Rate"])
+
+# Plot a line chart showing the fertility rate of the top five countries along with the same for the world.
 fig = px.line(df_all_fertility, x='Year', y=df_all_fertility.columns[1:], title="Fertility Rate of Terrorist-prone Countries", color_discrete_sequence=colorList, labels={
                      "value": "Fertility Rate",
                      "variable": ""
@@ -442,8 +482,11 @@ fig.show()
 
 @fig-socioeconomic shows the GDP and fertility rate of the aforementioned five-most terrorist-prone countries. All these countries had a lower GDP and higher fertility rate compared to the global average in the given period. India is an exception to have its GDP increase at a faster rate than the global average. Similarly, Colombia is an exception to have its fertility rate below the global average right from the 1980s.
 
+## Modeling
 ```{python}
 #| eval: false
+
+# Remove the columns we will not be using for the modeling.
 try:
     del df_attacks["Event ID"]
     del df_attacks["Motive"]
@@ -454,6 +497,7 @@ except:
 df_attacks = df_attacks.dropna()
 df_attacks[['Country', 'Region', 'Province/State', 'City', 'Attack Type', 'Target Type', 'Terrorist Group', 'Weapon Type']] = df_attacks[['Country', 'Region', 'Province/State', 'City', 'Attack Type', 'Target Type', 'Terrorist Group', 'Weapon Type']].apply(LabelEncoder().fit_transform)
 
+# Split into predictor and response variables.
 y = df_attacks["Casualties"]
 X = df_attacks.drop(['Casualties'], axis=1)
 
@@ -461,11 +505,14 @@ X = df_attacks.drop(['Casualties'], axis=1)
 X_trainval, X_test, y_trainval, y_test = train_test_split(X, y, test_size=0.15, random_state=42)
 X_train, X_val, y_train, y_val = train_test_split(X_trainval, y_trainval, test_size=0.20, random_state=42)
 
+# Scale the dataset.
 scaler = RobustScaler()
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.fit_transform(X_test)
 X_val = scaler.fit_transform(X_val)
 
+
+# Neural Networks
 def create_bilstm():
     model = Sequential()
     model.add(Bidirectional(LSTM(128, activation='relu', input_shape=(12,1), return_sequences=True)))
@@ -507,14 +554,17 @@ def create_gru():
     model.add(Dense(1, activation='linear'))
     return model
 
+# Result container
 result = []
-
 dlModels = {"Feed Forward NN": create_ffnn(), "CNN": create_cnn(), "GRU": create_gru(), "Bi-LSTM": create_bilstm()}
 
+
+# Reshape the train, test and validation sets.
 X_train_new = X_train.reshape(X_train.shape[0], X_train.shape[1], 1)
 X_val_new = X_val.reshape(X_val.shape[0], X_val.shape[1], 1)
 X_test_new = X_test.reshape(X_test.shape[0], X_test.shape[1], 1)
 
+# Train the neural networks one at a time.
 for name, model in dlModels.items():
     start_time = time.time()
     model.compile(optimizer='adam', loss='mse')
@@ -526,7 +576,7 @@ for name, model in dlModels.items():
         y_pred = model.predict(X_test)
     result.append([name, round(np.sqrt(mean_squared_error(y_test, y_pred)), 2), round(time.time() - start_time, 2)])
 
-
+# Train the machine learning models one at a time.
 mlModels = {"Random Forest": RandomForestRegressor(), "K Neighbors": neighbors.KNeighborsRegressor(), "Decision Trees": DecisionTreeRegressor()}
 for name, model in mlModels.items():
     start_time = time.time()
@@ -534,6 +584,7 @@ for name, model in mlModels.items():
     pred = model.predict(X_test)
     result.append([name, round(np.sqrt(mean_squared_error(y_test, pred)), 2), round(time.time() - start_time, 2)])
 
+# Save the results in a csv file.
 pd.options.display.float_format = '{:.2f}'.format
 result_df = pd.DataFrame(result, columns=["Model", "Root Mean Squared Error", "Time (in seconds)"])
 result_df.to_csv("./results.csv")  
@@ -541,23 +592,30 @@ result_df.to_csv("./results.csv")
 
 Finally, let's take the machine and deep learning algorithms out of our arsenals and tackle the problem of predicting the number of casualties for any given attack based on the date, country, region, state, city, suicidal intent, type, target type, terrorist group, and weapon used in the attack. We believe such a model will be useful for intelligence groups to assess the severity of attacks and prepare for them in the future.
 
-The dataset was split into train, validation, and test sets in the ratio 70:15:15. The train and validation sets were used during the training phase and the test set was for testing the efficiency of the model based on the time it take and its root-mean-squared(RMS) error. The results are shown in @fig-results.
+The dataset was split into train, validation, and test sets in the ratio 70:15:15. The train and validation sets were used during the training phase and the test set was used for assessing the efficiency of the models based on the time they take and their root-mean-squared(RMS) error. The results are shown in @fig-results.
 
 ```{python}
 #| label: fig-results
 #| fig-cap: "Efficiency of Models"
+
+# Read the results from the csv.
 result_df = pd.read_csv("../results/results.csv")
 result_df = result_df.sort_values(by=['Root Mean Squared Error'])
+
+# Plot the data.
 matplotlib.rc_file_defaults()
 ax1 = sns.set_style(style=None, rc=None)
-
 fig, ax1 = plt.subplots(figsize=(12,6))
 colors = ["#5D3FD3", "#5D3FD3", "#5D3FD3","#5D3FD3", "#0096FF", "#0096FF", "#0096FF"]
+
+# Plot the bar chart and set figure options.
 sns.barplot(data = result_df, x='Model', y='Root Mean Squared Error', alpha=0.5, ax=ax1, palette=colors)
 ax1.set_xticklabels(ax1.get_xticklabels(), fontsize=12)
 ax1.set_xlabel("Models", fontsize=14)
 ax1.set_ylabel("Root Mean Squared Error", fontsize=14)
 ax1.set_title("Efficiency of Models", fontsize=16)
+
+# Plot the lineplot on the same chart and change the alpha level of the charts.
 ax2 = ax1.twinx()
 ax2.set_ylabel("Time (in seconds)", fontsize=14)
 dl = mpatches.Patch(color="#5D3FD3")
@@ -573,11 +631,17 @@ plt.show()
 
 Feed Forward Neural Network turned out to be the most effective model, achieving an RMS error of 8.68, and Decision Trees was the fastest model, completing prediction in 0.99 seconds. In general, neural networks had lower RMS error than other machine learning models but they were also slower to train and test than their machine learning counterparts. 
 
-Our analysis ends here for now but in the future, the models will be tuned for their hyperparameters and trained on a larger dataset, combining and feature engineering different socio-economic factors to achieve the lowest possible RMSE score. 
+Our analysis ends here for now but in the future, we will explore multiple other variables in the terrorism database along with different other socio-economic factors and their relationship with terrorist attacks. We will also perform extensive hyperparameter tuning and train more sophisticated models like different variants of FractalNets, ResNets, and XceptionNets on a larger dataset, combining and feature engineering different socio-economic factors to achieve the lowest possible RMSE score. 
 
+Until we meet again, I hope you give your best in whatever way you can for building a society that stands tall and strong on the foundation of love and peace. Cause, violence is never the answer. 
+
+ 
 ## More Animations
 ```{python}
 #| eval: false
+
+# Code for bar chart race for countries with highest number of terrorist attacks.
+# Yearly data is found for each of the countries.
 df_countries_pivot = pd.DataFrame(df_attacks.groupby(["Country", "Year"]).count()).reset_index()
 df_countries_pivot.rename(columns={"Event ID": "Number of Terrorist Attacks"}, inplace=True)
 df_countries_pivot = df_countries_pivot.pivot_table(values = 'Number of Terrorist Attacks',index = ['Year'], columns = 'Country')
@@ -593,6 +657,7 @@ bcr.bar_chart_race(df = df_countries_pivot,
                    filter_column_colors=True,
                    filename = None)
 
+# Code for bar chart race for terrorist attacks based on geographical regions.
 df_region_pivot = pd.DataFrame(df_attacks.groupby(["Region", "Year"]).count()).reset_index()
 df_region_pivot.rename(columns={"Event ID": "Number of Terrorist Attacks"}, inplace=True)
 df_region_pivot = df_region_pivot.pivot_table(values = 'Number of Terrorist Attacks',index = ['Year'], columns = 'Region')
@@ -608,19 +673,18 @@ bcr.bar_chart_race(df = df_region_pivot,
                    filter_column_colors=True,
                    filename = None)
 
-df_region_pivot = pd.DataFrame(df_attacks.groupby(["Region", "Year"]).count()).reset_index()
-df_region_pivot.rename(columns={"Event ID": "Number of Terrorist Attacks"}, inplace=True)
-df_region_pivot = df_region_pivot.pivot_table(values = 'Number of Terrorist Attacks',index = ['Year'], columns = 'Region')
-df_region_pivot.fillna(0, inplace=True)
-df_region_pivot.sort_values(list(df_region_pivot.columns),inplace=True)
-df_region_pivot = df_region_pivot.sort_index()
-df_region_pivot.iloc[:, 0:-1] = df_region_pivot.iloc[:, 0:-1].cumsum()
-bcr.bar_chart_race(df = df_region_pivot, 
-                   n_bars = 10,
-                   period_length=750,
+# Code for bar chart race for terrorist groups with the highest number of attacks.
+df_animation_pivot = df_notorious_groups.pivot_table(values = 'Casualties',index = ['Year'], columns = 'Terrorist Group')
+df_animation_pivot.fillna(0, inplace=True)
+df_animation_pivot.sort_values(list(df_animation_pivot.columns),inplace=True)
+df_animation_pivot = df_animation_pivot.sort_index()
+df_animation_pivot = df_animation_pivot.drop(columns=["Unknown"])
+df_animation_pivot.iloc[:, 0:-1] = df_animation_pivot.iloc[:, 0:-1].cumsum()    
+bcr.bar_chart_race(df = df_animation_pivot, 
+                   n_bars = 10, 
+                   period_length=1000,
                    sort='desc',
-                   title="Terrorist Attacks based on Geographical Region",
-                   filter_column_colors=True,
+                   title="Terrorist Groups with the Highest Number of Attacks",
                    filename = None)
 ```
 <iframe data-external="1" src="https://www.youtube.com/embed/qmtzgzcPTbk"></iframe>

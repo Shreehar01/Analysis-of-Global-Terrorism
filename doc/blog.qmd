@@ -6,6 +6,7 @@ bibliography: references.bib
 number-sections: false
 format:
   html:
+    toc: true
     theme: 
       - cosmo
     rendering: embed-resources
@@ -90,10 +91,9 @@ fig.update_layout(title_x=0.44)
 fig.show()
 ```
 
-The animation in @fig-import shows that there were a significant number of terrorist attacks in 
+The animation above shows that there were a significant number of terrorist attacks in 
 the US from 1970 to 2017. It is surprising to see this, especially when we consider the effort the US has put
-over the past 50 years in tackling terrorism in almost every terrorist-prone country. So before anything else, let's analyze
-the states in the US that have the highest number of such incidents.
+over the past 50 years in tackling terrorism in almost every terrorist-prone country. Which states had the highest number of terrrosit attacks? Lets find out.
 
 ```{python}
 #| label: fig-us
@@ -205,8 +205,7 @@ is assigned a value of 1 and the least score is assigned a value of 0. We see th
 and Nebraska are the five most terrorist-prone states in the US and Kentucky, South Carolina, West Virginia, Alaska, and Arkansas
 are the safest states in terms of the frequency of terrorist attacks. 
 
-It might be interesting to see the motives behind the terrorist attacks in the US. So, let's explore them, and to be more specific, let's compare the motives of the terrorist attacks from 1970-1999 and 2000-2017. 
-
+So what exactly motivates these terrorist groups and has it changed over the last fifty years?
 ```{python}
 #| label: fig-motives
 #| layout-ncol: 2
@@ -266,7 +265,7 @@ plt.show()
 
 Both the word clouds share a common theme of abortion, suggesting that this has been a prominent topic of discussion and conflict for several decades. However, the word-clouds also differ in significant ways. The first word-cloud, which pertains to the pre-2000 period, reveals issues that were relevant to Puerto Rico, Vietnam, and African American groups. The second word-cloud, which represents the post-2000 period, shows themes that are related to Iraq, ISIL, and Islamic states. These topics suggest that there has been an increase in religiously motivated attacks over the past 20 years. This shift in topics also reflects changes in the political landscape both domestically and internationally from fighting against the spread of communism and racism to religiously motivated terrorism.
 
-Now, let's analyze how the frequency of terrorist attacks has changed over the last 50 years. 
+Now that we have analyzed the state of terrorism in the US, how about we now move to get its bigger picture? Let's begin by analyzing how the frequency of terrorist attacks has changed over the last 50 years. 
 
 ```{python}
 #| label: fig-frequency
@@ -285,7 +284,7 @@ fig.update_layout({
 fig.show()
 ```
 
-It is apparent from @fig-frequency that the number of terrorist attacks was at its minimum around the years 
+It is clear from @fig-frequency that the number of terrorist attacks was at its minimum around the years 
 1972 and 2003 (it is worth mentioning that the data for 1994 was missing and not 0) and has greatly increased over the last decade. 
 
 But, what parts of the world have experienced the highest number of terrorist attacks? 
@@ -345,9 +344,9 @@ fig.update_layout(height=500, width=880)
 fig.show()
 ```
 
-In @fig-countries, we see that Iraq in the Middle East; Afghanistan, Pakistan, and India in South Asia, and Colombia in South America were the most terrorist-prone countries. 
+@fig-countries shows that Iraq in the Middle East; Afghanistan, Pakistan, and India in South Asia, and Colombia in South America were the most terrorist-prone countries. 
 
-The analysis of global terrorism is incomplete without information on terrorist groups. So, let's see the top 15 most notorious terrorist groups based on the number of casualties from the attacks they have orchestrated.
+The analysis of global terrorism is incomplete without information on terrorist groups. How about to we visualize the top 15 most notorious terrorist groups based on the number of casualties from their attacks?
 
 ```{python}
 #| label: fig-groups
@@ -399,9 +398,9 @@ fig.update_layout({
 fig.show()
 ```
 
-Most of the attacks have been targeted toward private citizens & property, the military, and the police. Private citizens & properties are generally the easiest groups to be attacked. This might be one possible explanation for such a high number of attacks on them. 
+Most of the attacks have been targeted toward private citizens & property, the military, and the police. Private citizens & properties are generally the easiest groups to be attacked and also the group with highest population. This might be one possible explanation for such a high number of attacks on them. 
 
-Now, let's analyze the relationship between terrorism and socio-economic factors like GDP and fertility rate.
+Now, let's change our direction a little bit. Let's analyze how terrorism is related to socio-economic factors like GDP and fertility rate.
 
 ```{python}
 #| label: fig-socioeconomic
@@ -481,9 +480,9 @@ fig.update_layout(height=400, width=800)
 fig.show()
 ```
 
-@fig-socioeconomic shows the GDP and fertility rate of the aforementioned five-most terrorist-prone countries. All these countries had a lower GDP and higher fertility rate compared to the global average in the given period. India is an exception to have its GDP increase at a faster rate than the global average. Similarly, Colombia is an exception to have its fertility rate below the global average right from the 1980s.
+@fig-socioeconomic shows the GDP and fertility rate of the aforementioned five-most terrorist-prone countries. We can clearly see from the graphs above that all these countries generally have a lower GDP and higher fertility rate compared to the global average in the given period. India is an exception to have its GDP increase at a faster rate than the global average. Similarly, Colombia is an exception to have its fertility rate below the global average right from the 1980s.
 
-## Modeling
+## Machine and Deep Learning
 ```{python}
 #| eval: false
 
@@ -633,11 +632,11 @@ plt.show()
 Feed Forward Neural Network turned out to be the most effective model, achieving an RMS error of 8.68, and Decision Trees was the fastest model, completing prediction in 0.99 seconds. In general, neural networks had lower RMS error than other machine learning models but they were also slower to train and test than their machine learning counterparts. 
 
 Our analysis ends here for now but in the future, we will explore multiple other variables in the terrorism database along with different other socio-economic factors and their relationship with terrorist attacks. We will also perform extensive hyperparameter tuning and train more sophisticated models like different variants of FractalNets, ResNets, and XceptionNets on a larger dataset, combining and feature engineering different socio-economic factors to achieve the lowest possible RMSE score. 
-
-Until we meet again, I hope you give your best in whatever way you can for building a society that stands tall and strong on the foundation of love and peace. Cause, violence is never the answer. 
-
  
 ## More Animations
+
+Before you go, here's a little treat for your eyes.
+
 ```{python}
 #| eval: false
 

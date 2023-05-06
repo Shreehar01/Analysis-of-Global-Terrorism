@@ -18,11 +18,11 @@ jupyter: python3
 
 ![](./Terrorism.jpg){width=100%}
 
-Terrorism has been a constant hindrance on our effort to achieve global peace and prosperity. From hostage situations and hijackings to mass shootings and bombings, terrorist attacks have a profound impact on both the victims and the larger society; they cause physical harm and loss of life, as well as emotional trauma and psychological distress. Needless to say, they can have long-lasting socio-economic consequences, disrupting trade and commerce, causing job losses, and decreasing investor confidence.
+Terrorism has been a constant hindrance on our effort to achieve global peace and prosperity. From hostage situations and hijackings to mass shootings and bombings, terrorist attacks have a profound impact on both the victims and the larger society; they cause physical harm and loss of life, as well as emotional trauma and psychological distress. Needless to say, they can have long-lasting socioeconomic consequences, disrupting trade and commerce, causing job losses, and decreasing investor confidence.
 
 As the frequency of terrorist attacks is increasing at a rate faster than ever, it is crucial to understand them and their trends and patterns. In this blog post, I will be examining various aspects of terrorism including regions, targets, methods, and motives using three open-source datasets.
 
-The first dataset, [Global Terrorism Database (GTD)](https://www.kaggle.com/datasets/START-UMD/gtd), contains information on over 180,000 global terrorist attacks from 1970 to 2017. Similarly, the two other datasets - [World, Region, Country GDP](https://www.kaggle.com/datasets/tmishinev/world-country-gdp-19602021) and [World Bank National Accounts data](https://data.worldbank.org/indicator/NY.GDP.MKTP.CD), includes the data for GDP, fertility rate and net migration of different countries in the aforementioned period. All the three datasets were retrieved from the popular data science website [Kaggle](https://www.kaggle.com/). 
+The first dataset, [Global Terrorism Database (GTD)](https://www.kaggle.com/datasets/START-UMD/gtd), contains information on over 180,000 global terrorist attacks from 1970 to 2017. Similarly, the two other datasets - [World, Region, Country GDP](https://www.kaggle.com/datasets/tmishinev/world-country-gdp-19602021) and [World Bank National Accounts data](https://data.worldbank.org/indicator/NY.GDP.MKTP.CD), includes the data for Gross Domestic Production (GDP), fertility rate and net migration of different countries in the aforementioned period. All the three datasets were retrieved from the popular data science website [Kaggle](https://www.kaggle.com/). 
 
 I hope this project will shed some light on the phenomenon of global terrorism and will equip us better to combat them in the future. So let's roll up our sleeves and demystify the world of global terrorism.
 
@@ -96,7 +96,7 @@ fig.show()
 ```
 
 The animation above shows that there were a significant number of terrorist attacks in 
-the US from 1970 to 2017. It is surprising to see this, especially when we consider the effort the US has put
+the US from 1970 to 2017. It is surprising to see this, especially when we consider the effort the US has made
 over the past 50 years in tackling terrorism in almost every terrorist-prone country. 
 
 Which states had the highest number of terrorist attacks? Lets find out.
@@ -198,7 +198,7 @@ fig = px.choropleth(df_attacks_us, locations='State Code', color='Number of Terr
                     color_continuous_scale="Viridis",
                     locationmode="USA-states", 
                     scope="usa",
-                    labels={'Number of Terrorist Attacks (Standardised)':'No. of Terrorist Attacks'},
+                    labels={'Number of Terrorist Attacks (Standardised)':'No. of Attacks (Standardised)'},
                     title="Terrorist Attacks in the US (1970-2017)")
 fig.update_layout(title_x=0.44)
 fig.update_layout( legend = {"xanchor": "right", "x": -0, "y":1.9})
@@ -207,7 +207,7 @@ fig.show()
 ```
 
 @fig-us shows different states in the US with a varying number of terrorist attacks, which has been calculated by dividing the 
-total number of terrorist attacks in a given state by its population and standardizing in such a way the state with the highest score
+total number of terrorist attacks in a given state by its population and standardizing in such a way that the state with the highest score
 is assigned a value of 1 and the least score is assigned a value of 0. We see that New York, Oregon, California, Washington,
 and Nebraska are the five most terrorist-prone states in the US and Kentucky, South Carolina, West Virginia, Alaska, and Arkansas
 are the safest states in terms of the frequency of terrorist attacks. 
@@ -270,7 +270,7 @@ plt.title("Attack Motives (" + str(2000) + " - " + str(2017) + ")", fontdict={'f
 plt.show()
 ```
 
-Both the word clouds share a common theme of abortion, suggesting that this has been a prominent topic of discussion and conflict for several decades in the US. However, the word-clouds also differ in significant ways. The first word-cloud, which pertains to the pre-2000 period, reveals issues that were relevant to Puerto Rico, Vietnam, and African American groups. The second word-cloud, which represents the post-2000 period, shows themes that are related to Iraq, ISIL, and Islamic states. These topics tend to indicate that there has been an increase in attacks associated with religion over the past 20 years in the US. This shift in topics aptly reflects the changes in the political landscape both domestically and internationally - from fighting against the spread of communism and racism to battling religiously motivated terrorism.
+Both the word clouds share a common theme of abortion, suggesting that this has been a prominent topic of discussion and conflict for several decades in the US. However, the wordclouds also differ in significant ways. The first wordcloud, which pertains to the pre-2000 period, reveals issues that were relevant to Puerto Rico, Vietnam, and African American groups. The second wordcloud, which represents the post-2000 period, shows themes that are related to Iraq, ISIL, and Islamic states. These topics tend to indicate that there has been an increase in attacks associated with religion over the past 20 years in the US. This shift in topics aptly reflects the changes in the political landscape both domestically and internationally - from fighting against the spread of communism and racism to battling religiously motivated terrorism.
 
 ### Global Terrorism
 Now that we have analyzed the state of terrorism in the US, how about we move to get its bigger picture? Let's begin by analyzing how the frequency of terrorist attacks has changed over the last 50 years. 
@@ -293,7 +293,8 @@ fig.show()
 ```
 
 It is clear from @fig-frequency that the number of terrorist attacks was at its minimum around the years 
-1972 and 2003 (it is worth mentioning that the data for 1994 was missing and not 0) and has greatly increased over the last decade. 
+1972 and 2003 (it is worth mentioning that the data for 1994 was missing and not 0) and has greatly increased over the last 10 years
+in the dataset (2007-2017). 
 
 So, what parts of the world have experienced the highest number of terrorist attacks? 
 
@@ -381,7 +382,7 @@ fig.update_layout({
 fig.show()
 ```
 
-One cannot fail to notice the peak in 2001 for Al Qaida, which is widely taken as the beginning of the rise of other Islamic religious extremist terrorist groups. Another interesting finding: Taliban, Boko Haram, and ISIL, as we can see from the steep lines after 2010 in @fig-groups, appear to have killed more people than all the other 12 terrorist groups combined in the last 50 years.
+One cannot fail to notice the peak in 2001 for Al Qaida's suicide terrorist attack against the United States (widely known as the 9/11 attack), which is widely taken as the beginning of the rise of other Islamic religious extremist terrorist groups. Another interesting finding: Taliban, Boko Haram, and ISIL, as we can see from the steep lines after 2010 in @fig-groups, have taken nearly the same number of lives as the total fatalities caused by the other 12 terrorist groups put together over the past 50 years.
 
 So what exactly do these terrorist groups target? Let's find out.
 ```{python}
@@ -409,8 +410,8 @@ fig.show()
 
 Most of the attacks have been targeted toward private citizens & property, the military, and the police. Private citizens & properties are generally the easiest groups to be attacked and also the group with highest population. This might be one possible explanation for such a high number of attacks on them. 
 
-### Socio-economic Aspects
-Now, let's change our direction a little bit. We will analyze how terrorism is related to different socio-economic factors like GDP and fertility rate.
+### Socioeconomic Aspects
+Now, let's change our direction a little bit. We will analyze how terrorism is related to different socioeconomic factors like GDP and fertility rate.
 
 ```{python}
 #| label: fig-socioeconomic
@@ -490,7 +491,7 @@ fig.update_layout(height=400, width=800)
 fig.show()
 ```
 
-@fig-socioeconomic shows the GDP and fertility rate of the aforementioned five-most terrorist-prone countries. We can clearly see from the graphs above that all these countries generally have a lower GDP and higher fertility rate compared to the global average in the given period. India is an exception to have its GDP increase at a faster rate than the global average. Similarly, Colombia is an exception to have its fertility rate below the global average right from the mid-1980s.
+@fig-socioeconomic shows the GDP and fertility rate of the aforementioned five-most terrorist-prone countries. We can clearly see from the graphs above that all these countries generally have a lower GDP and higher fertility rate compared to the global average in the given period. India is an exception, having its GDP increase at a faster rate than the global average. Similarly, Colombia is an exception, having its fertility rate below the global average right from the mid-1980s.
 
 ## Machine and Deep Learning
 
@@ -603,11 +604,11 @@ result_df.to_csv("./results.csv")
 ```
 
 
-Let's take the machine and deep learning algorithms out of our arsenals and tackle the problem of predicting the number of casualties for any given attack based on the country, region, state, city, suicidal intent, type, target type, terrorist group, and weapon used in the attack. Such a model can prove invaluable for intelligence groups to assess the severity of potential attacks and prepare for them in the future.
+Let's take the machine and deep learning algorithms out of our arsenals and tackle the problem of predicting the number of casualties for any given attack based on the date, country, region, state, city, suicidal intent, type, target type, terrorist group, and weapon used in the attack. Such a model can prove invaluable for intelligence groups to assess the severity of potential attacks and prepare for them in the future.
  
-The dataset is split into the train, validation, and test sets in the ratio 70:15:15. The train and validation sets are used during the training phase, and the test set is used for assessing the efficiency of the models based on the time they take and their root-mean-squared(RMS) error. 
+The dataset is split into the train, validation, and test sets in the ratio 70:15:15. The train and validation sets are used during the training phase, and the test set is used for assessing the efficiency of the models based on the time they take and their root-mean-squared (RMS) error. 
 
-We use four different deep learning models (Feed Forward Neural Network, Bi-directional Long-Short Term Memory, Convolutional Neural Network, and Gated Recurrent Unit) and three different machine learning models (Random Forest, K Neighbors, and Decision Trees) for this problem. Each of the neural networks has between five to seven layers, which are chosen based on their efficiency in the validation set.
+We use four different deep learning models (Feed Forward Neural Network, Bi-directional Long Short-Term Memory, Convolutional Neural Network, and Gated Recurrent Unit) and three other machine learning models (Random Forest, K-Nearest Neighbors, and Decision Trees) for this problem. Each of the neural networks has between five to seven layers, which are chosen based on their efficiency on the validation set.
 
 The results are shown in @fig-results.
 
@@ -646,9 +647,9 @@ sns.lineplot(data = list(result_df["Time (in seconds)"]), marker='o', ax=ax2, co
 plt.show()
 ```
 
-Feed Forward Neural Network turns out to be the most effective model, achieving an RMS error of 8.68, and Decision Trees is the fastest model, completing prediction in 0.99 seconds. In general, neural networks have a lower RMS error than other machine learning models but they are also slower to train and test than their machine learning counterparts.
+Feed Forward Neural Network turns out to be the most effective model, achieving an RMS error of 8.68, and Decision Trees is the fastest model, completing prediction in 0.99 seconds. In general, neural networks have a lower RMS error than other machine learning models but they are also slower to train and test than their machine learning counterparts. The lowest RMS error we got was 8.68, which is way higher than the average number of casualties at 2.40. That's a pretty big difference, so it's safe to say we still have some work to do before these models are really usable.   
 
-Our analysis ends here for now but in the future, we will explore multiple other variables in the terrorism database along with different other socio-economic factors and their relationship with terrorist attacks. We will also perform extensive hyperparameter tuning and train more sophisticated models like different variants of FractalNets, ResNets, and XceptionNets on a larger dataset, combining and feature engineering different socio-economic factors to achieve the lowest possible RMSE score. 
+Our analysis ends here but in the future, we will explore more variables in the terrorism database along with different other socioeconomic factors and their relationship with terrorist attacks. We will also perform extensive hyperparameter tuning and train more sophisticated models like different variants of FractalNets, ResNets, and XceptionNets on a larger dataset, combining and feature engineering different socioeconomic factors to achieve the lowest possible RMS error score. 
  
 ## More Animations
 

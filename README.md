@@ -9,7 +9,7 @@ As the frequency of terrorist attacks is increasing at a rate faster than ever, 
 
 The first dataset, [Global Terrorism Database (GTD)](https://www.kaggle.com/datasets/START-UMD/gtd), contains information on over 180,000 global terrorist attacks from 1970 to 2017. Similarly, the two other datasets - [World, Region, Country GDP](https://www.kaggle.com/datasets/tmishinev/world-country-gdp-19602021) and [World Bank National Accounts data](https://data.worldbank.org/indicator/NY.GDP.MKTP.CD), includes the data for Gross Domestic Production (GDP), fertility rate and net migration of different countries in the aforementioned period. All the three datasets were retrieved from the popular data science website [Kaggle](https://www.kaggle.com/). 
 
-I hope this project will shed some light on the phenomenon of global terrorism and will equip us better to combat them in the future. So let's roll up our sleeves and demystify the world of global terrorism.                         
+I hope this project will shed some light on the phenomenon of global terrorism and will equip us better to combat them in the future.    
 
 
 ## Directory Structure

@@ -16,7 +16,7 @@ format:
 jupyter: python3
 ---
 
-![](./terrorism.jpg){width=100%}
+![](./terror.jpg){width=100%}
 
 Terrorism has been a constant hindrance on our effort to achieve global peace and prosperity. From hostage situations and hijackings to mass shootings and bombings, terrorist attacks have a profound impact on both the victims and the larger society; they cause physical harm and loss of life, as well as emotional trauma and psychological distress. Needless to say, they can have long-lasting socioeconomic consequences, disrupting trade and commerce, causing job losses, and decreasing investor confidence.
 
@@ -188,17 +188,17 @@ def scale_column(df, column, minVal=float('-inf'), maxVal=float('inf')):
 
 # Count the number of terrorist attacks in each US state and standardize the number based on population
 df_attacks_us = df_attacks_us.merge(df_us_population[['State', 'Population']])
-df_attacks_us["Number of Terrorist Attacks (Standardised)"] = df_attacks_us["Number of Terrorist Attacks"] / df_attacks_us["Population"]
-tempVal = scale_column(df_attacks_us, "Number of Terrorist Attacks (Standardised)")
-df_attacks_us["Number of Terrorist Attacks (Standardised)"] = tempVal
-df_attacks_us = df_attacks_us.sort_values(by="Number of Terrorist Attacks (Standardised)", ascending=False)
+df_attacks_us["Number of Terrorist Attacks (Standardized)"] = df_attacks_us["Number of Terrorist Attacks"] / df_attacks_us["Population"]
+tempVal = scale_column(df_attacks_us, "Number of Terrorist Attacks (Standardized)")
+df_attacks_us["Number of Terrorist Attacks (Standardized)"] = tempVal
+df_attacks_us = df_attacks_us.sort_values(by="Number of Terrorist Attacks (Standardized)", ascending=False)
 
 # Plot the choropleth for terrorist attacks in the US states
-fig = px.choropleth(df_attacks_us, locations='State Code', color='Number of Terrorist Attacks (Standardised)',
+fig = px.choropleth(df_attacks_us, locations='State Code', color='Number of Terrorist Attacks (Standardized)',
                     color_continuous_scale="Viridis",
                     locationmode="USA-states", 
                     scope="usa",
-                    labels={'Number of Terrorist Attacks (Standardised)':'No. of Attacks (Standardised)'},
+                    labels={'Number of Terrorist Attacks (Standardized)':'No. of Attacks (Standardized)'},
                     title="Terrorist Attacks in the US (1970-2017)")
 fig.update_layout(title_x=0.44)
 fig.update_layout( legend = {"xanchor": "right", "x": -0, "y":1.9})

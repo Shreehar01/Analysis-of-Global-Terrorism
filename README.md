@@ -1,5 +1,7 @@
 # Analysis of Global Terrorism    
-![](https://github.com/Shreehar01/Analysis-of-Global-Terrorism/blob/main/doc/terror.jpg)                      
+![](https://github.com/Shreehar01/Analysis-of-Global-Terrorism/blob/main/doc/terror.jpg)                 
+
+
 ## Project Information
 Terrorism has been a constant hindrance on our effort to achieve global peace and prosperity. From hostage situations and hijackings to mass shootings and bombings, terrorist attacks have a profound impact on both the victims and the larger society; they cause physical harm and loss of life, as well as emotional trauma and psychological distress. Needless to say, they can have long-lasting socioeconomic consequences, disrupting trade and commerce, causing job losses, and decreasing investor confidence.
 
@@ -15,3 +17,8 @@ I hope this project will shed some light on the phenomenon of global terrorism a
 `./doc`: Contains the files for proposal, presentation, and the blog post.     
 `./results`: Contains the animations and the results of the models.    
 `./analysis`: Contains the raw ipynb analysis file used for generating visuals.         
+
+
+## Links
+<b>Blog Post</b>: https://shreehar01.github.io/Analysis-of-Global-Terrorism/doc/blog.html    
+<b>Animations</b>: https://www.youtube.com/playlist?list=PLLBAjcjf-mFsp-uHDKbo3HSbev0GjwQo0

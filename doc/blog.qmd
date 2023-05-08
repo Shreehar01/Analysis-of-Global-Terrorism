@@ -16,7 +16,7 @@ format:
 jupyter: python3
 ---
 
-![](./Terrorism.jpg){width=100%}
+![](./terrorism.jpg){width=100%}
 
 Terrorism has been a constant hindrance on our effort to achieve global peace and prosperity. From hostage situations and hijackings to mass shootings and bombings, terrorist attacks have a profound impact on both the victims and the larger society; they cause physical harm and loss of life, as well as emotional trauma and psychological distress. Needless to say, they can have long-lasting socioeconomic consequences, disrupting trade and commerce, causing job losses, and decreasing investor confidence.
 

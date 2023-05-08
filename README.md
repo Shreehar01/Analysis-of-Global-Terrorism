@@ -16,7 +16,7 @@ I hope this project will shed some light on the phenomenon of global terrorism a
 `./data`: Contains the datasets used in this project.     
 `./doc`: Contains the files for proposal, presentation, and the blog post.     
 `./results`: Contains the animations and the results of the models.    
-`./analysis`: Contains the raw ipynb analysis file used for generating visuals.         
+`./src`: Contains the raw ipynb analysis file used for generating visuals.         
 
 
 ## Links
